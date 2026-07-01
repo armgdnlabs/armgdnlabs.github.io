@@ -8,19 +8,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="styles.css?v=4"/>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to content</a>
 
+  <canvas class="bg-canvas" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
   <header class="site-header">
     <div class="header-inner">
-      <!-- REPLACE: swap .wordmark text with <img src="assets/logo.svg" alt="ARMGDN" height="22"> -->
       <a href="/" class="wordmark" aria-label="ARMGDN — home">ARMGDN</a>
       <nav class="main-nav" aria-label="Main">
         <a href="labs/" class="nav-link">Labs</a>
         <a href="records/" class="nav-link">Records</a>
         <a href="studios/" class="nav-link">Studios</a>
+        <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer" class="nav-link nav-gh">GitHub</a>
       </nav>
       <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
@@ -32,14 +35,13 @@
       <div class="grain"></div>
       <div class="hero-inner">
         <div class="hero-mark" aria-hidden="true">
-          <!-- REPLACE: <img src="assets/logo.svg" alt="ARMGDN" height="48" loading="lazy"> -->
           <div class="mark-placeholder">[ logo ]</div>
         </div>
-        <h1 class="hero-heading" data-editable>The Chaos<br><em>to Create.</em></h1>
+        <p class="hero-eyebrow mono" aria-hidden="true"><span class="typewriter"></span></p>
+        <h1 class="hero-heading glitch" data-text="The Chaos to Create." data-editable>The Chaos<br><em>to Create.</em></h1>
         <p class="hero-body" data-editable>Tools, music, and art for independent creators.<br>Free to use, made with care.</p>
         <div class="hero-links">
           <a href="labs/" class="btn btn-primary">Enter Labs</a>
-          <a href="records/" class="btn btn-ghost">Music</a>
         </div>
         <div class="hero-tape" aria-hidden="true">
           <span>ARMGDN &mdash;</span><span>LABS &mdash;</span><span>RECORDS &mdash;</span><span>STUDIOS &mdash;</span>
@@ -48,14 +50,14 @@
       </div>
     </section>
 
-    <section class="about">
+    <section class="about reveal">
       <div class="about-inner">
         <p class="about-text" data-editable>Make cool stuff. Share it. That&rsquo;s the whole thing.</p>
         <p class="about-aside mono" data-editable>// free / pay what you want</p>
       </div>
     </section>
 
-    <section class="divisions">
+    <section class="divisions reveal">
       <div class="divisions-inner">
         <a href="labs/" class="div-card">
           <div class="div-num mono">01</div>
@@ -78,10 +80,10 @@
       </div>
     </section>
 
-    <section class="tools-strip">
+    <section class="tools-strip reveal">
       <div class="strip-inner">
         <p class="strip-label mono">// From the lab</p>
-        <div class="strip-list">
+        <div class="strip-list" id="tools-strip-list">
           <a href="https://pocket-radio-fm.lovable.app" target="_blank" rel="noopener noreferrer" class="strip-row">
             <div class="strip-meta"><span class="strip-id mono">001</span><span class="strip-tag mono">Radio</span></div>
             <span class="strip-name">Pocket Radio FM</span>
@@ -117,17 +119,18 @@
           <a href="studios/">Studios</a>
           <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer">GitHub</a>
         </nav>
-        <p class="footer-copy mono">ARMGDN &copy; 2026 &mdash; free / pay what you want</p>
+        <p class="footer-copy mono">ARMGDN &copy; 2026 &mdash; free / pay what you want <span class="footer-pulse">&#9632;</span></p>
       </div>
     </footer>
   </main>
 
   <!-- ADMIN LOGIN MODAL -->
-  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login">
+  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login" id="admin-login-modal">
     <div class="admin-login-box">
       <h3>// ADMIN_ACCESS</h3>
-      <input type="password" class="admin-input" placeholder="password" autocomplete="current-password"/>
-      <p class="admin-err"></p>
+      <input type="text" class="admin-input" id="admin-user-input" placeholder="username" autocomplete="username"/>
+      <input type="password" class="admin-input" id="admin-pass-input" placeholder="password" autocomplete="current-password"/>
+      <p class="admin-err" id="admin-err"></p>
       <div style="display:flex;gap:0.5rem;">
         <button id="admin-login-btn" class="btn btn-primary" style="flex:1;">Enter</button>
         <button id="admin-cancel-btn" class="btn btn-ghost">Cancel</button>
@@ -136,11 +139,12 @@
   </div>
 
   <!-- ADMIN BAR -->
-  <div class="admin-bar">
-    <span class="admin-note">// ADMIN MODE — click any outlined text to edit</span>
+  <div class="admin-bar" id="admin-bar">
+    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit &mdash; <a href="admin/" style="color:var(--green);text-decoration:underline;">Open Dashboard</a></span>
+    <button id="admin-save-btn" class="admin-btn">Save Changes</button>
     <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
