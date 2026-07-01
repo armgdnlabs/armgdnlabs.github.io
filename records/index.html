@@ -7,8 +7,156 @@
   <meta name="description" content="ARMGDN Records — music releases."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=5"/>
+  <style>
+    /* ── RECORDS PAGE SPECIFIC ── */
+    .records-hero-tape {
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem 0;
+      margin-top: 2rem;
+    }
+    .records-hero-tape span {
+      display: inline-block;
+      animation: tape-scroll 18s linear infinite;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+      padding-right: 3rem;
+    }
+
+    /* ARTIST ROSTER */
+    .roster-section { padding: 3rem 0 1rem; }
+    .roster-section .strip-inner { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* RELEASES GRID */
+    .release-grid { padding: 1.5rem 0 5rem; }
+    .release-grid-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    .release-grid-inner > .mono { font-size: 0.72rem; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 2rem; }
+    .release-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    /* RELEASE CARD */
+    .release-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: var(--fg);
+      position: relative;
+      transition: transform 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .release-card:hover { transform: translateY(-4px); }
+    .release-card:hover .release-cover::after { opacity: 1; }
+
+    .release-cover {
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      background: var(--surface2);
+      position: relative;
+      border: 1px solid var(--border);
+    }
+    .release-cover::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(127,255,95,0.06);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+      pointer-events: none;
+    }
+    .release-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cover-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 0.75rem; color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .release-meta {
+      padding: 0.85rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+    .release-type {
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
+      color: var(--green);
+      text-transform: uppercase;
+    }
+    .release-title {
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.2;
+      margin-top: 0.1rem;
+    }
+    .release-artist { font-size: 0.82rem; color: var(--muted); margin-top: 0.1rem; }
+    .release-year { font-family: var(--mono); font-size: 0.65rem; color: var(--muted); margin-top: 0.35rem; }
+
+    /* EMBED PLAYER STRIP */
+    .player-strip {
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .player-strip-inner { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .player-strip-inner > .mono { font-size: 0.72rem; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 1.5rem; }
+    .player-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .player-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .player-card-label {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.85rem;
+    }
+    .player-card-label .platform-tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: 0.15rem 0.45rem;
+    }
+    .player-card-label .track-title {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+    .player-card iframe {
+      width: 100%;
+      border: none;
+      display: block;
+    }
+    /* placeholder when no embed url set */
+    .player-placeholder {
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      letter-spacing: 0.1em;
+    }
+  </style>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to content</a>
@@ -19,38 +167,94 @@
         <a href="/labs/" class="nav-link">Labs</a>
         <a href="/records/" class="nav-link" aria-current="page">Records</a>
         <a href="/studios/" class="nav-link">Studios</a>
+        <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer" class="nav-link nav-gh">GitHub</a>
       </nav>
       <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
   </header>
+
   <main id="main">
     <section class="page-hero">
       <div class="grain"></div>
       <div class="page-hero-inner">
-        <!-- REPLACE: artist photo or label mark here -->
-        <p class="page-eyebrow">// ARMGDN Records</p>
+        <p class="page-eyebrow mono">// ARMGDN Records</p>
         <h1 class="page-title">Music</h1>
         <p class="page-sub" data-editable>Releases from the ARMGDN universe. Pay what you want.</p>
+        <div class="records-hero-tape">
+          <span>ARMGDN RECORDS &mdash; R&amp;B &mdash; NEO-SOUL &mdash; ELECTRONIC &mdash; PAY WHAT YOU WANT &mdash; ARMGDN RECORDS &mdash; R&amp;B &mdash; NEO-SOUL &mdash; ELECTRONIC &mdash; PAY WHAT YOU WANT &mdash;</span>
+        </div>
       </div>
     </section>
 
     <!-- ARTIST ROSTER -->
-    <section class="tools-strip">
+    <section class="roster-section">
       <div class="strip-inner">
         <p class="strip-label mono">// Artists</p>
         <div class="strip-list">
-          <!-- ADD artist rows here. Pattern:
-          <a href="records/yondr/" class="strip-row">
+          <div class="strip-row">
             <div class="strip-meta"><span class="strip-id mono">ART_01</span><span class="strip-tag mono">Producer</span></div>
-            <span class="strip-name">𝖄𝖔𝖓𝖉𝖗</span>
-            <span class="strip-status live">Active</span>
-          </a>
-          -->
-          <div class="strip-row faded">
-            <div class="strip-meta"><span class="strip-id mono">ART_01</span><span class="strip-tag mono">Producer</span></div>
-            <span class="strip-name">𝖄𝖔𝖓𝖉𝖗</span>
+            <span class="strip-name" data-editable>𝖄𝖔𝖓𝖉𝖗</span>
             <span class="strip-status tba">Releases soon</span>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURED PLAYER STRIP -->
+    <section class="player-strip">
+      <div class="player-strip-inner">
+        <p class="mono">// Listen</p>
+        <div class="player-cards">
+
+          <!--
+            HOW TO ADD A SOUNDCLOUD EMBED:
+            1. Go to the track on SoundCloud
+            2. Click Share > Embed
+            3. Copy the iframe src URL
+            4. Paste it as the src of the iframe below
+            5. Remove the player-placeholder div
+
+            HOW TO ADD A SPOTIFY EMBED:
+            Spotify embed URL format:
+            https://open.spotify.com/embed/track/TRACK_ID?utm_source=generator
+
+            HOW TO ADD A YOUTUBE EMBED:
+            https://www.youtube.com/embed/VIDEO_ID
+          -->
+
+          <div class="player-card">
+            <div class="player-card-label">
+              <span class="platform-tag">SoundCloud</span>
+              <span class="track-title" data-editable>Track title here</span>
+            </div>
+            <div class="player-placeholder">[ paste SoundCloud embed src to activate ]</div>
+            <!-- REPLACE placeholder div above with:
+            <iframe src="https://w.soundcloud.com/player/?url=..." height="166" scrolling="no" allow="autoplay"></iframe>
+            -->
+          </div>
+
+          <div class="player-card">
+            <div class="player-card-label">
+              <span class="platform-tag">Spotify</span>
+              <span class="track-title" data-editable>Track title here</span>
+            </div>
+            <div class="player-placeholder">[ paste Spotify embed src to activate ]</div>
+            <!-- REPLACE placeholder div above with:
+            <iframe src="https://open.spotify.com/embed/track/..." height="152" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            -->
+          </div>
+
+          <div class="player-card">
+            <div class="player-card-label">
+              <span class="platform-tag">YouTube</span>
+              <span class="track-title" data-editable>Video title here</span>
+            </div>
+            <div class="player-placeholder">[ paste YouTube embed src to activate ]</div>
+            <!-- REPLACE placeholder div above with:
+            <iframe src="https://www.youtube.com/embed/..." height="200" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            -->
+          </div>
+
         </div>
       </div>
     </section>
@@ -60,24 +264,6 @@
       <div class="release-grid-inner">
         <h2 class="mono">// Releases</h2>
         <div class="release-list">
-
-          <!-- ════════════════════════════════════════
-               RELEASE CARD TEMPLATE
-               Duplicate this block for each release.
-               ════════════════════════════════════════
-          <a href="records/releases/release-slug/" class="release-card">
-            <div class="release-cover">
-              <img src="../../assets/covers/release-slug.jpg" alt="Release title cover art" width="400" height="400" loading="lazy">
-            </div>
-            <div class="release-meta">
-              <span class="release-type mono">EP</span>
-              <span class="release-title">Release Title</span>
-              <span class="release-artist">𝖄𝖔𝖓𝖉𝖗</span>
-              <span class="release-year">2026</span>
-            </div>
-          </a>
-          ──────────────────────────────────────────── -->
-
           <!-- PLACEHOLDER CARD -->
           <div class="release-card" style="opacity:0.25;pointer-events:none;">
             <div class="release-cover">
@@ -90,7 +276,6 @@
               <span class="release-year">TBA</span>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -103,24 +288,27 @@
       <nav class="footer-nav">
         <a href="/">Home</a><a href="/labs/">Labs</a><a href="/studios/">Studios</a>
       </nav>
-      <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+      <p class="footer-copy mono">ARMGDN &copy; 2026 &mdash; free / pay what you want <span class="footer-pulse">&#9632;</span></p>
     </div>
   </footer>
-  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login">
+
+  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login" id="admin-login-modal">
     <div class="admin-login-box">
       <h3>// ADMIN_ACCESS</h3>
-      <input type="password" class="admin-input" placeholder="password" autocomplete="current-password"/>
-      <p class="admin-err"></p>
+      <input type="text" class="admin-input" id="admin-user-input" placeholder="username" autocomplete="username"/>
+      <input type="password" class="admin-input" id="admin-pass-input" placeholder="password" autocomplete="current-password"/>
+      <p class="admin-err" id="admin-err"></p>
       <div style="display:flex;gap:0.5rem;">
         <button id="admin-login-btn" class="btn btn-primary" style="flex:1;">Enter</button>
         <button id="admin-cancel-btn" class="btn btn-ghost">Cancel</button>
       </div>
     </div>
   </div>
-  <div class="admin-bar">
-    <span class="admin-note">// ADMIN MODE — click outlined text to edit</span>
+  <div class="admin-bar" id="admin-bar">
+    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit &mdash; <a href="../admin/" style="color:var(--green);text-decoration:underline;">Dashboard</a></span>
+    <button id="admin-save-btn" class="admin-btn">Save Changes</button>
     <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
   </div>
-  <script src="../script.js"></script>
+  <script src="../script.js?v=5"></script>
 </body>
 </html>

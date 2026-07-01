@@ -7,8 +7,9 @@
   <meta name="description" content="ARMGDN Labs — browser tools for producers."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=5"/>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to content</a>
@@ -19,6 +20,7 @@
         <a href="/labs/" class="nav-link" aria-current="page">Labs</a>
         <a href="/records/" class="nav-link">Records</a>
         <a href="/studios/" class="nav-link">Studios</a>
+        <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer" class="nav-link nav-gh">GitHub</a>
       </nav>
       <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
@@ -27,9 +29,9 @@
     <section class="page-hero">
       <div class="grain"></div>
       <div class="page-hero-inner">
-        <p class="page-eyebrow">// ARMGDN Labs</p>
+        <p class="page-eyebrow mono">// ARMGDN Labs</p>
         <h1 class="page-title">Tools</h1>
-        <p class="page-sub">Browser tools for producers and creators. Free, no account needed.</p>
+        <p class="page-sub" data-editable>Browser tools for producers and creators. Free, no account needed.</p>
       </div>
     </section>
     <section class="tools-strip" style="border-bottom:none;">
@@ -51,11 +53,6 @@
             <span class="strip-name">Chord Codes 101</span>
             <span class="strip-status dev">Beta</span>
           </a>
-          <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer" class="strip-row">
-            <div class="strip-meta"><span class="strip-id mono">004</span><span class="strip-tag mono">Repo</span></div>
-            <span class="strip-name">All source code</span>
-            <span class="strip-status tba">GitHub &rarr;</span>
-          </a>
           <div class="strip-row faded">
             <div class="strip-meta"><span class="strip-id mono">???</span><span class="strip-tag mono">???</span></div>
             <span class="strip-name">More coming</span>
@@ -74,25 +71,26 @@
         <a href="/records/">Records</a>
         <a href="/studios/">Studios</a>
       </nav>
-      <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+      <p class="footer-copy mono">ARMGDN &copy; 2026 &mdash; free / pay what you want <span class="footer-pulse">&#9632;</span></p>
     </div>
   </footer>
-  <!-- ADMIN LOGIN MODAL -->
-  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login">
+  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login" id="admin-login-modal">
     <div class="admin-login-box">
       <h3>// ADMIN_ACCESS</h3>
-      <input type="password" class="admin-input" placeholder="password" autocomplete="current-password"/>
-      <p class="admin-err"></p>
+      <input type="text" class="admin-input" id="admin-user-input" placeholder="username" autocomplete="username"/>
+      <input type="password" class="admin-input" id="admin-pass-input" placeholder="password" autocomplete="current-password"/>
+      <p class="admin-err" id="admin-err"></p>
       <div style="display:flex;gap:0.5rem;">
         <button id="admin-login-btn" class="btn btn-primary" style="flex:1;">Enter</button>
         <button id="admin-cancel-btn" class="btn btn-ghost">Cancel</button>
       </div>
     </div>
   </div>
-  <div class="admin-bar">
-    <span class="admin-note">// ADMIN MODE</span>
+  <div class="admin-bar" id="admin-bar">
+    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit</span>
+    <button id="admin-save-btn" class="admin-btn">Save Changes</button>
     <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
   </div>
-  <script src="../script.js"></script>
+  <script src="../script.js?v=5"></script>
 </body>
 </html>

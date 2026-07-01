@@ -1,9 +1,8 @@
-// ARMGDN — script.js v5
+// ARMGDN — script.js v5.1
 
 (function(){
 
   // ── SAFE STORAGE ──
-  // localStorage is unavailable in some sandboxed contexts — always wrap.
   var _mem = {};
   function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _mem[k]=v; } }
   function recall(k){ try{ return localStorage.getItem(k); }catch(e){ return _mem[k]||null; } }
@@ -123,19 +122,41 @@
     reveals.forEach(function(el){ el.classList.add('revealed'); });
   }
 
+  // ── TEXT SCRAMBLE on hero heading ──
+  var scrambleEl = document.querySelector('.glitch');
+  if(scrambleEl){
+    var chars = '!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ01';
+    var originalText = scrambleEl.dataset.text || scrambleEl.textContent;
+    scrambleEl.addEventListener('mouseenter', function(){
+      var iter = 0;
+      var interval = setInterval(function(){
+        scrambleEl.textContent = originalText
+          .split('')
+          .map(function(c,i){
+            if(c === ' ' || c === '\n') return c;
+            if(i < iter) return originalText[i];
+            return chars[Math.floor(Math.random()*chars.length)];
+          })
+          .join('');
+        if(iter >= originalText.length) clearInterval(interval);
+        iter += 1.5;
+      }, 40);
+    });
+  }
+
+  // ── STRIP ROW HOVER SOUND PULSE (visual only) ──
+  document.querySelectorAll('.strip-row').forEach(function(row){
+    row.style.cursor = 'pointer';
+  });
+
   // ── ADMIN ──
-  // Credentials are NOT stored in plain text.
-  // The password is checked against a SHA-256 hash at runtime.
-  // To change creds: update ADMIN_USER and replace ADMIN_PASS_HASH
-  // with: await crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword'))
-  //        then convert to hex.
-  var ADMIN_USER      = 'armgdn';
-  // SHA-256 of 'labs2026'  — generated offline, never the raw string
-  var ADMIN_PASS_HASH = 'b3ca8c82ef8a6e2b94f0b3f50a8e7c1d9f2344e1a6b7c8d9e0f1a2b3c4d5e6f7';
-  // NOTE: replace the hash above with your real hash before deploying.
-  // Generate it in DevTools console:
+  // Password is checked via SHA-256 hash. Never store raw password.
+  // To update password: run in console:
   //   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword'));
   //   console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''));
+  // Then replace ADMIN_PASS_HASH below.
+  var ADMIN_USER      = 'armgdn';
+  var ADMIN_PASS_HASH = '3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b'; // SHA-256 of 'labs2026'
 
   async function hashPass(str){
     var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
@@ -153,6 +174,7 @@
   var saveBtn    = document.getElementById('admin-save-btn');
   var isAdmin    = false;
 
+  // Trigger: hold A+D+M simultaneously
   var held={};
   document.addEventListener('keydown',function(e){
     held[e.key.toLowerCase()]=true;
@@ -160,9 +182,13 @@
       adminModal.classList.add('visible');
       setTimeout(function(){ if(userInput) userInput.focus(); },50);
     }
-    if(e.key==='Escape'&&adminModal) adminModal.classList.remove('visible');
+    if(e.key==='Escape'){
+      if(adminModal) adminModal.classList.remove('visible');
+    }
   });
   document.addEventListener('keyup',function(e){ delete held[e.key.toLowerCase()]; });
+
+  function showErr(){ if(errEl){ errEl.textContent='// ACCESS DENIED'; errEl.classList.add('visible'); } }
 
   function doLogin(){
     var u = userInput ? userInput.value.trim() : '';
@@ -171,29 +197,23 @@
     hashPass(p).then(function(hash){
       if(hash === ADMIN_PASS_HASH){
         isAdmin=true;
-        adminModal.classList.remove('visible');
-        adminBar.classList.add('visible');
+        if(adminModal) adminModal.classList.remove('visible');
+        if(adminBar)   adminBar.classList.add('visible');
         document.body.classList.add('admin-mode');
         loadSavedContent();
         enableEditing();
         if(errEl){ errEl.textContent=''; errEl.classList.remove('visible'); }
-      } else {
-        showErr();
-      }
+      } else { showErr(); }
     });
   }
 
-  function showErr(){
-    if(errEl){ errEl.textContent='// ACCESS DENIED'; errEl.classList.add('visible'); }
-  }
-
-  if(loginBtn) loginBtn.addEventListener('click', doLogin);
+  if(loginBtn)  loginBtn.addEventListener('click', doLogin);
   if(passInput) passInput.addEventListener('keydown',function(e){ if(e.key==='Enter') doLogin(); });
-  if(cancelBtn) cancelBtn.addEventListener('click',function(){ adminModal.classList.remove('visible'); });
+  if(cancelBtn) cancelBtn.addEventListener('click',function(){ if(adminModal) adminModal.classList.remove('visible'); });
   if(logoutBtn) logoutBtn.addEventListener('click',function(){
     isAdmin=false;
     document.body.classList.remove('admin-mode');
-    adminBar.classList.remove('visible');
+    if(adminBar) adminBar.classList.remove('visible');
     disableEditing();
   });
   if(saveBtn) saveBtn.addEventListener('click', saveContent);
@@ -202,12 +222,72 @@
     document.querySelectorAll('[data-editable]').forEach(function(el){
       el.contentEditable='true';
     });
+    // Also make color-bearing CSS vars editable via admin bar panel
+    injectColorPanel();
   }
   function disableEditing(){
     document.querySelectorAll('[data-editable]').forEach(function(el){
       el.contentEditable='false';
     });
+    var cp = document.getElementById('admin-color-panel');
+    if(cp) cp.remove();
   }
+
+  // ── COLOR PANEL (admin only) ──
+  function injectColorPanel(){
+    if(document.getElementById('admin-color-panel')) return;
+    var panel = document.createElement('div');
+    panel.id = 'admin-color-panel';
+    panel.style.cssText = [
+      'position:fixed','bottom:52px','right:1rem',
+      'background:var(--surface)','border:1px solid var(--green)',
+      'padding:1rem','z-index:9999','font-family:var(--mono)',
+      'font-size:0.65rem','letter-spacing:0.1em','color:var(--muted)',
+      'display:flex','gap:1rem','flex-wrap:wrap','max-width:420px',
+      'box-shadow:0 4px 24px rgba(0,0,0,0.5)'
+    ].join(';');
+
+    var vars = [
+      ['--green',   'Accent'],
+      ['--fg',      'Text'],
+      ['--muted',   'Muted'],
+      ['--bg',      'Background'],
+      ['--surface', 'Surface'],
+      ['--border',  'Border'],
+    ];
+
+    var style = getComputedStyle(document.documentElement);
+    vars.forEach(function(v){
+      var name = v[0], label = v[1];
+      var current = style.getPropertyValue(name).trim();
+      var wrap = document.createElement('label');
+      wrap.style.cssText = 'display:flex;flex-direction:column;gap:0.25rem;align-items:center;cursor:pointer;';
+      wrap.innerHTML = '<input type="color" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;" value="'+(current||'#ffffff')+'" data-var="'+name+'">'+label;
+      wrap.querySelector('input').addEventListener('input', function(e){
+        document.documentElement.style.setProperty(name, e.target.value);
+        store('armgdn-color-'+name, e.target.value);
+      });
+      panel.appendChild(wrap);
+    });
+
+    var resetBtn = document.createElement('button');
+    resetBtn.textContent = 'Reset colors';
+    resetBtn.style.cssText = 'margin-top:0.5rem;width:100%;background:none;border:1px solid var(--border);color:var(--muted);padding:0.3rem;cursor:pointer;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;';
+    resetBtn.addEventListener('click', function(){
+      vars.forEach(function(v){ document.documentElement.style.removeProperty(v[0]); store('armgdn-color-'+v[0],''); });
+    });
+    panel.appendChild(resetBtn);
+    document.body.appendChild(panel);
+  }
+
+  // Load saved colors on every page load
+  (function loadSavedColors(){
+    var vars = ['--green','--fg','--muted','--bg','--surface','--border'];
+    vars.forEach(function(name){
+      var saved = recall('armgdn-color-'+name);
+      if(saved) document.documentElement.style.setProperty(name, saved);
+    });
+  })();
 
   function saveContent(){
     var saved={};
@@ -222,7 +302,7 @@
     var raw = recall('armgdn-content');
     if(!raw) return;
     try{
-      var saved=JSON.parse(raw);
+      var saved = JSON.parse(raw);
       document.querySelectorAll('[data-editable]').forEach(function(el,i){
         if(saved['el_'+i]!==undefined) el.innerHTML=saved['el_'+i];
       });
@@ -230,9 +310,5 @@
   }
 
   loadSavedContent();
-
-  document.querySelectorAll('a.strip-row').forEach(function(row){
-    row.style.cursor='pointer';
-  });
 
 })();

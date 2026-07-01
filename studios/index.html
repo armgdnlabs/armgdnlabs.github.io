@@ -7,8 +7,184 @@
   <meta name="description" content="ARMGDN Studios — art direction and visual design."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=5"/>
+  <style>
+    /* ── STUDIOS PAGE SPECIFIC ── */
+
+    /* BENTO PROJECT GRID */
+    .project-grid { padding: 1.5rem 0 5rem; }
+    .project-grid-inner { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+    .project-grid-inner > .mono { font-size: 0.72rem; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 2rem; }
+
+    .project-bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 180px;
+      gap: 0.75rem;
+    }
+
+    /* Card spans */
+    .project-card { grid-column: span 6; grid-row: span 2; }
+    .project-card.wide { grid-column: span 8; grid-row: span 2; }
+    .project-card.narrow { grid-column: span 4; grid-row: span 2; }
+    .project-card.tall { grid-column: span 5; grid-row: span 3; }
+    .project-card.short { grid-column: span 7; grid-row: span 1; }
+    .project-card.full { grid-column: span 12; grid-row: span 1; }
+
+    @media (max-width: 768px) {
+      .project-bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
+      .project-card,
+      .project-card.wide,
+      .project-card.narrow,
+      .project-card.tall,
+      .project-card.short,
+      .project-card.full { grid-column: span 1; grid-row: span 1; }
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      color: var(--fg);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: border-color 0.22s ease, transform 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .project-card:hover { border-color: var(--green); transform: translateY(-2px); }
+
+    .project-thumb {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+    }
+    .project-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .project-card:hover .project-thumb img { transform: scale(1.04); }
+
+    .thumb-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 0.7rem;
+      color: var(--muted); letter-spacing: 0.1em;
+    }
+
+    /* Video embed inside card */
+    .project-thumb iframe {
+      width: 100%; height: 100%;
+      border: none; display: block;
+      pointer-events: none; /* allow hover on card, click opens modal */
+    }
+    .project-card:hover .project-thumb iframe { pointer-events: auto; }
+
+    .project-info {
+      padding: 0.75rem 1rem;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .project-cat {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: 0.1rem 0.4rem;
+      white-space: nowrap;
+    }
+    .project-title {
+      font-size: 0.88rem;
+      font-weight: 500;
+      flex: 1;
+    }
+    .project-year {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* MEDIA MODAL */
+    .media-modal {
+      display: none;
+      position: fixed; inset: 0;
+      z-index: 200;
+      background: rgba(0,0,0,0.88);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      backdrop-filter: blur(8px);
+    }
+    .media-modal.open { display: flex; }
+    .media-modal-inner {
+      width: 100%;
+      max-width: 860px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .media-modal-close {
+      position: absolute; top: 0.75rem; right: 0.75rem;
+      background: none; border: 1px solid var(--border);
+      color: var(--muted); width: 32px; height: 32px;
+      cursor: pointer; font-family: var(--mono); font-size: 0.75rem;
+      z-index: 1;
+      transition: color 0.18s, border-color 0.18s;
+    }
+    .media-modal-close:hover { color: var(--green); border-color: var(--green); }
+    .media-modal-body { padding: 2rem; }
+    .media-modal-body iframe {
+      width: 100%; aspect-ratio: 16/9;
+      border: none; display: block;
+      margin-top: 1rem;
+    }
+    .media-modal-body img {
+      width: 100%; display: block;
+      margin-top: 1rem;
+    }
+    .media-modal-title {
+      font-size: 1.1rem; font-weight: 500; margin-bottom: 0.25rem;
+    }
+    .media-modal-cat {
+      font-family: var(--mono); font-size: 0.6rem;
+      letter-spacing: 0.14em; color: var(--green);
+    }
+    .media-modal-desc {
+      font-size: 0.85rem; color: var(--muted);
+      margin-top: 0.5rem; max-width: 60ch;
+    }
+
+    /* SERVICES STRIP */
+    .services-strip { padding: 3rem 0; border-top: 1px solid var(--border); }
+    .services-strip-inner { max-width: 900px; margin: 0 auto; padding: 0 1.5rem; }
+    .services-strip-inner > .mono { font-size: 0.72rem; letter-spacing: 0.14em; color: var(--muted); margin-bottom: 1.5rem; }
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+    }
+    .service-item {
+      padding: 1.25rem;
+      border-right: 1px solid var(--border);
+    }
+    .service-item:last-child { border-right: none; }
+    .service-num { font-family: var(--mono); font-size: 0.62rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .service-name { font-size: 0.9rem; font-weight: 500; }
+    .service-desc { font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
+  </style>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to content</a>
@@ -19,76 +195,108 @@
         <a href="/labs/" class="nav-link">Labs</a>
         <a href="/records/" class="nav-link">Records</a>
         <a href="/studios/" class="nav-link" aria-current="page">Studios</a>
+        <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer" class="nav-link nav-gh">GitHub</a>
       </nav>
       <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
   </header>
+
   <main id="main">
     <section class="page-hero">
       <div class="grain"></div>
       <div class="page-hero-inner">
-        <p class="page-eyebrow">// ARMGDN Studios</p>
+        <p class="page-eyebrow mono">// ARMGDN Studios</p>
         <h1 class="page-title">Art &amp; Design</h1>
         <p class="page-sub" data-editable>Art direction, visual identity, and branding for independent artists.</p>
       </div>
     </section>
 
+    <!-- SERVICES -->
+    <section class="services-strip">
+      <div class="services-strip-inner">
+        <p class="mono">// Services</p>
+        <div class="services-list">
+          <div class="service-item">
+            <div class="service-num">01</div>
+            <div class="service-name" data-editable>Branding</div>
+            <div class="service-desc" data-editable>Artist identity, logos, marks.</div>
+          </div>
+          <div class="service-item">
+            <div class="service-num">02</div>
+            <div class="service-name" data-editable>Art Direction</div>
+            <div class="service-desc" data-editable>Cover art, press photos, campaigns.</div>
+          </div>
+          <div class="service-item">
+            <div class="service-num">03</div>
+            <div class="service-name" data-editable>Packaging</div>
+            <div class="service-desc" data-editable>Physical and digital release design.</div>
+          </div>
+          <div class="service-item">
+            <div class="service-num">04</div>
+            <div class="service-name" data-editable>Motion</div>
+            <div class="service-desc" data-editable>Lyric videos, visualizers, reels.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENTO WORK GRID -->
     <section class="project-grid">
       <div class="project-grid-inner">
         <h2 class="mono">// Work</h2>
-        <div class="project-list">
+        <div class="project-bento">
 
-          <!-- ════════════════════════════════════════
-               PROJECT CARD TEMPLATE
-               Duplicate for each project.
-               Categories: Branding / Motion / Type / Poster / Visual / Packaging
-               ════════════════════════════════════════
-          <a href="studios/projects/project-slug/" class="project-card">
-            <div class="project-thumb">
-              <img src="../../assets/projects/project-slug.jpg" alt="" width="560" height="350" loading="lazy">
-            </div>
-            <div class="project-info">
-              <span class="project-cat">Branding</span>
-              <span class="project-title">Project Name</span>
-              <p class="project-desc">One or two lines about the work.</p>
-              <span class="project-year">2026</span>
-            </div>
-          </a>
-          ──────────────────────────────────────────── -->
+          <!--
+            HOW TO ADD A PROJECT CARD:
+            1. Copy a .project-card block below
+            2. Set class modifier: wide / narrow / tall / short / full (or default)
+            3. For image: add <img> inside .project-thumb
+            4. For YouTube/Vimeo: add <iframe src="https://www.youtube.com/embed/VIDEO_ID"> inside .project-thumb
+            5. Set data-title, data-cat, data-desc, data-media on the card for the modal
 
-          <!-- PLACEHOLDER CARD -->
-          <div class="project-card" style="opacity:0.2;pointer-events:none;">
-            <div class="project-thumb">
-              <div class="thumb-placeholder">[ thumb ]</div>
-            </div>
+            CARD ATTRIBUTES FOR MODAL:
+              data-title  = project name
+              data-cat    = category (Branding / Motion / Type / Packaging)
+              data-desc   = short description shown in modal
+              data-media  = YouTube/Vimeo embed URL OR image URL (shown in modal lightbox)
+          -->
+
+          <!-- PLACEHOLDER CARDS -->
+          <div class="project-card"
+               data-title="First Project"
+               data-cat="Branding"
+               data-desc="Portfolio loading — first project TBA."
+               style="opacity:0.2;pointer-events:none;">
+            <div class="project-thumb"><div class="thumb-placeholder">[ thumb ]</div></div>
             <div class="project-info">
               <span class="project-cat">Branding</span>
               <span class="project-title">First project</span>
-              <p class="project-desc">Portfolio loading.</p>
               <span class="project-year">2026</span>
             </div>
           </div>
 
-          <div class="project-card" style="opacity:0.2;pointer-events:none;">
-            <div class="project-thumb">
-              <div class="thumb-placeholder">[ thumb ]</div>
-            </div>
+          <div class="project-card narrow"
+               data-title="Motion Work"
+               data-cat="Motion"
+               data-desc="Portfolio loading."
+               style="opacity:0.2;pointer-events:none;">
+            <div class="project-thumb"><div class="thumb-placeholder">[ thumb ]</div></div>
             <div class="project-info">
               <span class="project-cat">Motion</span>
               <span class="project-title">Motion work</span>
-              <p class="project-desc">Portfolio loading.</p>
               <span class="project-year">2026</span>
             </div>
           </div>
 
-          <div class="project-card" style="opacity:0.2;pointer-events:none;">
-            <div class="project-thumb">
-              <div class="thumb-placeholder">[ thumb ]</div>
-            </div>
+          <div class="project-card wide"
+               data-title="Type Work"
+               data-cat="Type"
+               data-desc="Portfolio loading."
+               style="opacity:0.2;pointer-events:none;">
+            <div class="project-thumb"><div class="thumb-placeholder">[ thumb ]</div></div>
             <div class="project-info">
               <span class="project-cat">Type</span>
               <span class="project-title">Type work</span>
-              <p class="project-desc">Portfolio loading.</p>
               <span class="project-year">2026</span>
             </div>
           </div>
@@ -98,6 +306,19 @@
     </section>
   </main>
 
+  <!-- MEDIA LIGHTBOX MODAL -->
+  <div class="media-modal" id="media-modal" role="dialog" aria-modal="true" aria-label="Project detail">
+    <div class="media-modal-inner">
+      <button class="media-modal-close" id="media-modal-close" aria-label="Close">&times;</button>
+      <div class="media-modal-body">
+        <div class="media-modal-cat" id="modal-cat"></div>
+        <div class="media-modal-title" id="modal-title"></div>
+        <div class="media-modal-desc" id="modal-desc"></div>
+        <div id="modal-media-container"></div>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-inner">
       <span class="footer-wordmark mono">ARMGDN</span>
@@ -105,24 +326,80 @@
       <nav class="footer-nav">
         <a href="/">Home</a><a href="/labs/">Labs</a><a href="/records/">Records</a>
       </nav>
-      <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+      <p class="footer-copy mono">ARMGDN &copy; 2026 &mdash; free / pay what you want <span class="footer-pulse">&#9632;</span></p>
     </div>
   </footer>
-  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login">
+
+  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login" id="admin-login-modal">
     <div class="admin-login-box">
       <h3>// ADMIN_ACCESS</h3>
-      <input type="password" class="admin-input" placeholder="password" autocomplete="current-password"/>
-      <p class="admin-err"></p>
+      <input type="text" class="admin-input" id="admin-user-input" placeholder="username" autocomplete="username"/>
+      <input type="password" class="admin-input" id="admin-pass-input" placeholder="password" autocomplete="current-password"/>
+      <p class="admin-err" id="admin-err"></p>
       <div style="display:flex;gap:0.5rem;">
         <button id="admin-login-btn" class="btn btn-primary" style="flex:1;">Enter</button>
         <button id="admin-cancel-btn" class="btn btn-ghost">Cancel</button>
       </div>
     </div>
   </div>
-  <div class="admin-bar">
-    <span class="admin-note">// ADMIN MODE — click outlined text to edit</span>
+  <div class="admin-bar" id="admin-bar">
+    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit &mdash; <a href="../admin/" style="color:var(--green);text-decoration:underline;">Dashboard</a></span>
+    <button id="admin-save-btn" class="admin-btn">Save Changes</button>
     <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
   </div>
-  <script src="../script.js"></script>
+
+  <script src="../script.js?v=5"></script>
+  <script>
+    // Studios-specific: project card modal
+    (function(){
+      var modal = document.getElementById('media-modal');
+      var closeBtn = document.getElementById('media-modal-close');
+      var modalCat = document.getElementById('modal-cat');
+      var modalTitle = document.getElementById('modal-title');
+      var modalDesc = document.getElementById('modal-desc');
+      var modalMedia = document.getElementById('modal-media-container');
+
+      document.querySelectorAll('.project-card').forEach(function(card){
+        card.addEventListener('click', function(e){
+          if(e.target.closest('.project-thumb iframe')) return; // let iframe handle
+          var title = card.dataset.title || '';
+          var cat   = card.dataset.cat   || '';
+          var desc  = card.dataset.desc  || '';
+          var media = card.dataset.media || '';
+          modalCat.textContent   = cat;
+          modalTitle.textContent = title;
+          modalDesc.textContent  = desc;
+          modalMedia.innerHTML   = '';
+          if(media){
+            // detect image vs iframe
+            if(/\.(jpg|jpeg|png|gif|webp|svg)/i.test(media)){
+              var img = document.createElement('img');
+              img.src = media; img.alt = title;
+              modalMedia.appendChild(img);
+            } else {
+              var fr = document.createElement('iframe');
+              fr.src = media;
+              fr.allow = 'autoplay; fullscreen; picture-in-picture';
+              fr.allowFullscreen = true;
+              modalMedia.appendChild(fr);
+            }
+          }
+          modal.classList.add('open');
+        });
+      });
+
+      function closeModal(){
+        modal.classList.remove('open');
+        modalMedia.innerHTML = ''; // stop video
+      }
+      if(closeBtn) closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(e){
+        if(e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+      });
+    })();
+  </script>
 </body>
 </html>
