@@ -1,4 +1,4 @@
-// ARMGDN — script.js v5.1
+// ARMGDN — script.js v5.2
 
 (function(){
 
@@ -144,19 +144,18 @@
     });
   }
 
-  // ── STRIP ROW HOVER SOUND PULSE (visual only) ──
+  // ── STRIP ROW cursor ──
   document.querySelectorAll('.strip-row').forEach(function(row){
     row.style.cursor = 'pointer';
   });
 
   // ── ADMIN ──
-  // Password is checked via SHA-256 hash. Never store raw password.
-  // To update password: run in console:
-  //   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword'));
+  // SHA-256 of 'labs2026' — computed via Python hashlib, verified correct.
+  // To change password, run in browser console:
+  //   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('newpassword'));
   //   console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''));
-  // Then replace ADMIN_PASS_HASH below.
   var ADMIN_USER      = 'armgdn';
-  var ADMIN_PASS_HASH = '3a7bd3e2360a3d29eea436fcfb7e44c735d117c42d1c1835420b6b9942dd4f1b'; // SHA-256 of 'labs2026'
+  var ADMIN_PASS_HASH = 'aeae0a59f459f47a2ab815a420d6a4e29c7de68c730a7fffca44725563360989';
 
   async function hashPass(str){
     var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
@@ -222,7 +221,6 @@
     document.querySelectorAll('[data-editable]').forEach(function(el){
       el.contentEditable='true';
     });
-    // Also make color-bearing CSS vars editable via admin bar panel
     injectColorPanel();
   }
   function disableEditing(){
