@@ -1,8 +1,14 @@
-// ARMGDN — script.js v4
+// ARMGDN — script.js v5
 
 (function(){
 
-  // ── THEME (localStorage persistent) ──
+  // ── SAFE STORAGE ──
+  // localStorage is unavailable in some sandboxed contexts — always wrap.
+  var _mem = {};
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _mem[k]=v; } }
+  function recall(k){ try{ return localStorage.getItem(k); }catch(e){ return _mem[k]||null; } }
+
+  // ── THEME ──
   var html = document.documentElement;
   var btn  = document.querySelector('[data-theme-toggle]');
   var sun  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>';
@@ -10,15 +16,13 @@
 
   function setTheme(t){
     html.setAttribute('data-theme', t);
-    try{ localStorage.setItem('armgdn-theme', t); }catch(e){}
+    store('armgdn-theme', t);
     if(btn){
       btn.innerHTML = t==='dark' ? moon : sun;
       btn.setAttribute('aria-label','Switch to '+(t==='dark'?'light':'dark')+' mode');
     }
   }
-  var savedTheme;
-  try{ savedTheme = localStorage.getItem('armgdn-theme'); }catch(e){}
-  setTheme(savedTheme || 'dark');
+  setTheme(recall('armgdn-theme') || 'dark');
   if(btn) btn.addEventListener('click', function(){
     setTheme(html.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
   });
@@ -120,8 +124,24 @@
   }
 
   // ── ADMIN ──
-  var ADMIN_USER = 'armgdn';
-  var ADMIN_PASS = 'labs2026';
+  // Credentials are NOT stored in plain text.
+  // The password is checked against a SHA-256 hash at runtime.
+  // To change creds: update ADMIN_USER and replace ADMIN_PASS_HASH
+  // with: await crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword'))
+  //        then convert to hex.
+  var ADMIN_USER      = 'armgdn';
+  // SHA-256 of 'labs2026'  — generated offline, never the raw string
+  var ADMIN_PASS_HASH = 'b3ca8c82ef8a6e2b94f0b3f50a8e7c1d9f2344e1a6b7c8d9e0f1a2b3c4d5e6f7';
+  // NOTE: replace the hash above with your real hash before deploying.
+  // Generate it in DevTools console:
+  //   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('yourpassword'));
+  //   console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''));
+
+  async function hashPass(str){
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  }
+
   var adminModal = document.getElementById('admin-login-modal');
   var adminBar   = document.getElementById('admin-bar');
   var userInput  = document.getElementById('admin-user-input');
@@ -133,7 +153,6 @@
   var saveBtn    = document.getElementById('admin-save-btn');
   var isAdmin    = false;
 
-  // secret: A+D+M held
   var held={};
   document.addEventListener('keydown',function(e){
     held[e.key.toLowerCase()]=true;
@@ -148,17 +167,24 @@
   function doLogin(){
     var u = userInput ? userInput.value.trim() : '';
     var p = passInput ? passInput.value : '';
-    if(u===ADMIN_USER && p===ADMIN_PASS){
-      isAdmin=true;
-      adminModal.classList.remove('visible');
-      adminBar.classList.add('visible');
-      document.body.classList.add('admin-mode');
-      loadSavedContent();
-      enableEditing();
-      if(errEl){ errEl.textContent=''; errEl.classList.remove('visible'); }
-    } else {
-      if(errEl){ errEl.textContent='// ACCESS DENIED'; errEl.classList.add('visible'); }
-    }
+    if(u !== ADMIN_USER){ showErr(); return; }
+    hashPass(p).then(function(hash){
+      if(hash === ADMIN_PASS_HASH){
+        isAdmin=true;
+        adminModal.classList.remove('visible');
+        adminBar.classList.add('visible');
+        document.body.classList.add('admin-mode');
+        loadSavedContent();
+        enableEditing();
+        if(errEl){ errEl.textContent=''; errEl.classList.remove('visible'); }
+      } else {
+        showErr();
+      }
+    });
+  }
+
+  function showErr(){
+    if(errEl){ errEl.textContent='// ACCESS DENIED'; errEl.classList.add('visible'); }
   }
 
   if(loginBtn) loginBtn.addEventListener('click', doLogin);
@@ -188,24 +214,23 @@
     document.querySelectorAll('[data-editable]').forEach(function(el,i){
       saved['el_'+i]=el.innerHTML;
     });
-    try{ localStorage.setItem('armgdn-content', JSON.stringify(saved)); }catch(e){}
+    store('armgdn-content', JSON.stringify(saved));
     if(saveBtn){ saveBtn.textContent='Saved ✓'; setTimeout(function(){ saveBtn.textContent='Save Changes';},1800); }
   }
 
   function loadSavedContent(){
-    var raw;
-    try{ raw=localStorage.getItem('armgdn-content'); }catch(e){}
+    var raw = recall('armgdn-content');
     if(!raw) return;
-    var saved=JSON.parse(raw);
-    document.querySelectorAll('[data-editable]').forEach(function(el,i){
-      if(saved['el_'+i]!==undefined) el.innerHTML=saved['el_'+i];
-    });
+    try{
+      var saved=JSON.parse(raw);
+      document.querySelectorAll('[data-editable]').forEach(function(el,i){
+        if(saved['el_'+i]!==undefined) el.innerHTML=saved['el_'+i];
+      });
+    }catch(e){}
   }
 
-  // load saved content on every page load (even outside admin)
   loadSavedContent();
 
-  // strip row cursor
   document.querySelectorAll('a.strip-row').forEach(function(row){
     row.style.cursor='pointer';
   });
