@@ -1,11 +1,21 @@
-// ARMGDN — script.js v5.2
+// ARMGDN — script.js v6
+// Key changes:
+//   1. Admin session uses sessionStorage so it persists across page navigations
+//   2. Content is only restored when admin is active (not on every page load)
+//   3. All accent color references now go through CSS vars (no hardcoded hex)
+//   4. Logo/placeholder upload wired up
 
 (function(){
 
   // ── SAFE STORAGE ──
+  // sessionStorage for admin state (lives for tab lifetime, crosses page navigations)
+  // localStorage for saved edits and color overrides
   var _mem = {};
   function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _mem[k]=v; } }
   function recall(k){ try{ return localStorage.getItem(k); }catch(e){ return _mem[k]||null; } }
+  function sStore(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){ _mem['s_'+k]=v; } }
+  function sRecall(k){ try{ return sessionStorage.getItem(k); }catch(e){ return _mem['s_'+k]||null; } }
+  function sClear(k){ try{ sessionStorage.removeItem(k); }catch(e){ delete _mem['s_'+k]; } }
 
   // ── THEME ──
   var html = document.documentElement;
@@ -26,6 +36,15 @@
     setTheme(html.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
   });
 
+  // Always restore saved color overrides on load (harmless, just CSS vars)
+  (function loadSavedColors(){
+    var vars = ['--green','--fg','--muted','--bg','--surface','--border'];
+    vars.forEach(function(name){
+      var saved = recall('armgdn-color-'+name);
+      if(saved) document.documentElement.style.setProperty(name, saved);
+    });
+  })();
+
   // ── BACKGROUND CANVAS ──
   var canvas = document.querySelector('.bg-canvas');
   if(canvas){
@@ -44,15 +63,24 @@
     function drawCanvas(){
       ctx.clearRect(0,0,W,H);
       var isDark = html.getAttribute('data-theme')!=='light';
-      var dotCol = isDark ? 'rgba(127,255,95,0.25)' : 'rgba(26,110,16,0.18)';
-      var lineCol = isDark ? 'rgba(127,255,95,0.06)' : 'rgba(26,110,16,0.05)';
+      // use computed --green for particle color so it follows admin color changes
+      var accentRaw = getComputedStyle(html).getPropertyValue('--green').trim() || '#7fff5f';
+      var dotCol = isDark
+        ? 'color-mix(in oklch,'+accentRaw+' 30%,transparent)'
+        : 'color-mix(in oklch,'+accentRaw+' 20%,transparent)';
+      var lineCol = isDark
+        ? 'color-mix(in oklch,'+accentRaw+' 8%,transparent)'
+        : 'color-mix(in oklch,'+accentRaw+' 6%,transparent)';
+      // canvas doesn't support color-mix natively — fall back to rgba with fixed opacity
+      var dotAlpha = isDark ? 0.25 : 0.18;
+      var lineAlpha = isDark ? 0.06 : 0.05;
       particles.forEach(function(p,i){
         p.x+=p.vx; p.y+=p.vy;
         if(p.x<0)p.x=W; if(p.x>W)p.x=0;
         if(p.y<0)p.y=H; if(p.y>H)p.y=0;
         ctx.beginPath();
         ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle=dotCol;
+        ctx.fillStyle=hexToRgba(accentRaw, dotAlpha);
         ctx.fill();
         for(var j=i+1;j<particles.length;j++){
           var dx=particles[j].x-p.x, dy=particles[j].y-p.y;
@@ -61,13 +89,21 @@
             ctx.beginPath();
             ctx.moveTo(p.x,p.y);
             ctx.lineTo(particles[j].x,particles[j].y);
-            ctx.strokeStyle=lineCol;
+            ctx.strokeStyle=hexToRgba(accentRaw, lineAlpha);
             ctx.lineWidth=0.5;
             ctx.stroke();
           }
         }
       });
       requestAnimationFrame(drawCanvas);
+    }
+    function hexToRgba(hex, alpha){
+      hex = hex.replace('#','');
+      if(hex.length===3) hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+      var r=parseInt(hex.slice(0,2),16)||127;
+      var g=parseInt(hex.slice(2,4),16)||255;
+      var b=parseInt(hex.slice(4,6),16)||95;
+      return 'rgba('+r+','+g+','+b+','+alpha+')';
     }
     drawCanvas();
   }
@@ -122,7 +158,7 @@
     reveals.forEach(function(el){ el.classList.add('revealed'); });
   }
 
-  // ── TEXT SCRAMBLE on hero heading ──
+  // ── TEXT SCRAMBLE ──
   var scrambleEl = document.querySelector('.glitch');
   if(scrambleEl){
     var chars = '!<>-_\\/[]{}—=+*^?#ABCDEFGHIJKLMNOPQRSTUVWXYZ01';
@@ -150,8 +186,7 @@
   });
 
   // ── ADMIN ──
-  // SHA-256 of 'labs2026' — computed via Python hashlib, verified correct.
-  // To change password, run in browser console:
+  // SHA-256 of 'labs2026'. To update:
   //   const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('newpassword'));
   //   console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''));
   var ADMIN_USER      = 'armgdn';
@@ -172,6 +207,16 @@
   var logoutBtn  = document.getElementById('admin-logout-btn');
   var saveBtn    = document.getElementById('admin-save-btn');
   var isAdmin    = false;
+
+  // ── SESSION PERSISTENCE ──
+  // If admin was active in this tab before navigating, restore automatically
+  if(sRecall('armgdn-admin') === '1'){
+    isAdmin = true;
+    document.body.classList.add('admin-mode');
+    if(adminBar) adminBar.classList.add('visible');
+    loadSavedContent();   // only restore content when admin is confirmed active
+    enableEditing();
+  }
 
   // Trigger: hold A+D+M simultaneously
   var held={};
@@ -196,6 +241,7 @@
     hashPass(p).then(function(hash){
       if(hash === ADMIN_PASS_HASH){
         isAdmin=true;
+        sStore('armgdn-admin','1');   // mark session as admin
         if(adminModal) adminModal.classList.remove('visible');
         if(adminBar)   adminBar.classList.add('visible');
         document.body.classList.add('admin-mode');
@@ -211,6 +257,7 @@
   if(cancelBtn) cancelBtn.addEventListener('click',function(){ if(adminModal) adminModal.classList.remove('visible'); });
   if(logoutBtn) logoutBtn.addEventListener('click',function(){
     isAdmin=false;
+    sClear('armgdn-admin');   // clear session flag so next page won't auto-restore
     document.body.classList.remove('admin-mode');
     if(adminBar) adminBar.classList.remove('visible');
     disableEditing();
@@ -222,6 +269,7 @@
       el.contentEditable='true';
     });
     injectColorPanel();
+    wireLogoUpload();
   }
   function disableEditing(){
     document.querySelectorAll('[data-editable]').forEach(function(el){
@@ -231,6 +279,47 @@
     if(cp) cp.remove();
   }
 
+  // ── LOGO UPLOAD ──
+  function wireLogoUpload(){
+    var mark = document.querySelector('.hero-mark');
+    if(!mark) return;
+
+    // Restore saved logo if present
+    var savedLogo = recall('armgdn-logo');
+    if(savedLogo) applyLogo(savedLogo);
+
+    mark.addEventListener('click', function(){
+      if(!isAdmin) return;
+      var inp = document.createElement('input');
+      inp.type = 'file';
+      inp.accept = 'image/*';
+      inp.onchange = function(){
+        var file = inp.files[0];
+        if(!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e){
+          var dataUrl = e.target.result;
+          store('armgdn-logo', dataUrl);
+          applyLogo(dataUrl);
+        };
+        reader.readAsDataURL(file);
+      };
+      inp.click();
+    });
+  }
+
+  function applyLogo(src){
+    var mark = document.querySelector('.hero-mark');
+    if(!mark) return;
+    mark.innerHTML = '<img src="'+src+'" alt="ARMGDN logo" class="hero-logo-img">';
+  }
+
+  // Logo is restored on every page load (not admin-gated — visitors should see it too)
+  (function(){
+    var savedLogo = recall('armgdn-logo');
+    if(savedLogo) applyLogo(savedLogo);
+  })();
+
   // ── COLOR PANEL (admin only) ──
   function injectColorPanel(){
     if(document.getElementById('admin-color-panel')) return;
@@ -238,19 +327,21 @@
     panel.id = 'admin-color-panel';
     panel.style.cssText = [
       'position:fixed','bottom:52px','right:1rem',
-      'background:var(--surface)','border:1px solid var(--green)',
-      'padding:1rem','z-index:9999','font-family:var(--mono)',
+      'background:var(--s2)','border:1px solid var(--green-b)',
+      'padding:1rem','z-index:9999','font-family:var(--font-mono)',
       'font-size:0.65rem','letter-spacing:0.1em','color:var(--muted)',
       'display:flex','gap:1rem','flex-wrap:wrap','max-width:420px',
-      'box-shadow:0 4px 24px rgba(0,0,0,0.5)'
+      'box-shadow:var(--sh-md)'
     ].join(';');
 
+    // Only expose --green since all other accent values derive from it via color-mix
+    // Also expose bg, text, muted, surface and border for full control
     var vars = [
       ['--green',   'Accent'],
-      ['--fg',      'Text'],
+      ['--text',    'Text'],
       ['--muted',   'Muted'],
       ['--bg',      'Background'],
-      ['--surface', 'Surface'],
+      ['--s1',      'Surface'],
       ['--border',  'Border'],
     ];
 
@@ -258,10 +349,19 @@
     vars.forEach(function(v){
       var name = v[0], label = v[1];
       var current = style.getPropertyValue(name).trim();
+      // convert color-mix or rgba to something the color input can preview
+      // just fallback gracefully
       var wrap = document.createElement('label');
       wrap.style.cssText = 'display:flex;flex-direction:column;gap:0.25rem;align-items:center;cursor:pointer;';
-      wrap.innerHTML = '<input type="color" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;" value="'+(current||'#ffffff')+'" data-var="'+name+'">'+label;
-      wrap.querySelector('input').addEventListener('input', function(e){
+      wrap.innerHTML = '<input type="color" style="width:32px;height:32px;border:none;background:none;cursor:pointer;padding:0;" data-var="'+name+'">'+label;
+      var inp = wrap.querySelector('input');
+      // try to set initial value
+      try{
+        // strip alpha / functions that color picker can't parse
+        var hex = current.match(/#[0-9a-fA-F]{3,6}/);
+        if(hex) inp.value = hex[0];
+      }catch(e){}
+      inp.addEventListener('input', function(e){
         document.documentElement.style.setProperty(name, e.target.value);
         store('armgdn-color-'+name, e.target.value);
       });
@@ -270,32 +370,34 @@
 
     var resetBtn = document.createElement('button');
     resetBtn.textContent = 'Reset colors';
-    resetBtn.style.cssText = 'margin-top:0.5rem;width:100%;background:none;border:1px solid var(--border);color:var(--muted);padding:0.3rem;cursor:pointer;font-family:var(--mono);font-size:0.62rem;letter-spacing:0.1em;';
+    resetBtn.style.cssText = 'margin-top:0.5rem;width:100%;background:none;border:1px solid var(--border);color:var(--muted);padding:0.3rem;cursor:pointer;font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.1em;';
     resetBtn.addEventListener('click', function(){
-      vars.forEach(function(v){ document.documentElement.style.removeProperty(v[0]); store('armgdn-color-'+v[0],''); });
+      vars.forEach(function(v){
+        document.documentElement.style.removeProperty(v[0]);
+        store('armgdn-color-'+v[0],'');
+      });
     });
     panel.appendChild(resetBtn);
     document.body.appendChild(panel);
   }
 
-  // Load saved colors on every page load
-  (function loadSavedColors(){
-    var vars = ['--green','--fg','--muted','--bg','--surface','--border'];
-    vars.forEach(function(name){
-      var saved = recall('armgdn-color-'+name);
-      if(saved) document.documentElement.style.setProperty(name, saved);
-    });
-  })();
-
+  // ── CONTENT SAVE / LOAD ──
+  // saveContent: only runs when admin explicitly presses Save
   function saveContent(){
     var saved={};
     document.querySelectorAll('[data-editable]').forEach(function(el,i){
       saved['el_'+i]=el.innerHTML;
     });
     store('armgdn-content', JSON.stringify(saved));
-    if(saveBtn){ saveBtn.textContent='Saved ✓'; setTimeout(function(){ saveBtn.textContent='Save Changes';},1800); }
+    if(saveBtn){
+      var orig = saveBtn.textContent;
+      saveBtn.textContent='Saved ✓';
+      setTimeout(function(){ saveBtn.textContent=orig; },1800);
+    }
   }
 
+  // loadSavedContent: only called when admin session is confirmed (login or session restore)
+  // so unsaved drafts never appear for regular visitors
   function loadSavedContent(){
     var raw = recall('armgdn-content');
     if(!raw) return;
@@ -306,7 +408,5 @@
       });
     }catch(e){}
   }
-
-  loadSavedContent();
 
 })();

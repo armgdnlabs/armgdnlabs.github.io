@@ -1,7 +1,9 @@
 /*
-  ARMGDN — styles.css v4
+  ARMGDN — styles.css v6
   Y2K OS × Alt-Indie Terminal. Phosphor green on warm-dark. One accent. No tan.
-  Fonts: Share Tech Mono (terminal) + Instrument Serif (editorial) + Space Grotesk (UI)
+  Fonts: Share Tech Mono (terminal) + Instrument Serif (editorial) + Satoshi (UI)
+  NOTE: ALL accent references use var(--green) / var(--green-d) / var(--green-b)
+  so the admin color picker propagates everywhere with zero hardcoded hex.
 */
 
 :root {
@@ -23,7 +25,7 @@
 
   --font-mono:   'Share Tech Mono','Courier New',monospace;
   --font-serif:  'Instrument Serif',Georgia,serif;
-  --font-body:   'Space Grotesk','Helvetica Neue',sans-serif;
+  --font-body:   'Satoshi','Helvetica Neue',sans-serif;
 }
 
 /* ── DARK ── */
@@ -39,11 +41,13 @@
   --muted:   #6a6855;
   --faint:   #35332a;
   --inv:     #0a0a08;
+  /* — accent: all derived from --green so admin color picker changes EVERYTHING — */
   --green:   #7fff5f;
-  --green-d: rgba(127,255,95,0.08);
-  --green-b: rgba(127,255,95,0.35);
+  --green-d: color-mix(in oklch, var(--green) 12%, transparent);
+  --green-b: color-mix(in oklch, var(--green) 40%, transparent);
   --sh-sm: 0 1px 4px rgba(0,0,0,0.6);
   --sh-md: 0 4px 20px rgba(0,0,0,0.7);
+  --sh-accent: 0 0 40px color-mix(in oklch, var(--green) 10%, transparent);
 }
 
 /* ── LIGHT ── */
@@ -60,10 +64,11 @@
   --faint:   #a8a48a;
   --inv:     #f0ede3;
   --green:   #1a6e10;
-  --green-d: rgba(26,110,16,0.07);
-  --green-b: rgba(26,110,16,0.28);
+  --green-d: color-mix(in oklch, var(--green) 10%, transparent);
+  --green-b: color-mix(in oklch, var(--green) 32%, transparent);
   --sh-sm: 0 1px 4px rgba(0,0,0,0.06);
   --sh-md: 0 4px 20px rgba(0,0,0,0.09);
+  --sh-accent: 0 0 40px color-mix(in oklch, var(--green) 8%, transparent);
 }
 
 /* ── BASE ── */
@@ -186,6 +191,11 @@ a{color:inherit;text-decoration:none;transition:color var(--trans);}
   letter-spacing:0.2em;color:var(--faint);
   border:1px dashed var(--border);
   padding:var(--sp-2) var(--sp-3);border-radius:var(--r-sm);
+}
+/* logo image when uploaded */
+.hero-logo-img{
+  max-height:64px;width:auto;
+  display:block;
 }
 .hero-eyebrow{
   font-size:var(--text-xs);color:var(--green);
@@ -525,7 +535,7 @@ a.strip-row:hover:not(.faded){background:var(--s2);}
   background:var(--s2);border:1px solid var(--green-b);
   border-radius:var(--r-xl);padding:var(--sp-8);
   width:320px;display:flex;flex-direction:column;gap:var(--sp-4);
-  box-shadow:0 0 40px rgba(127,255,95,0.08);
+  box-shadow:var(--sh-accent);
 }
 .admin-login-box h3{
   font-family:var(--font-mono);font-size:var(--text-sm);
@@ -543,6 +553,22 @@ a.strip-row:hover:not(.faded){background:var(--s2);}
 .admin-err.visible{display:block;}
 [data-editable]{position:relative;outline:1px dashed transparent;border-radius:var(--r-sm);transition:outline-color var(--trans);}
 .admin-mode [data-editable]{outline-color:var(--green-b);cursor:text;}
+
+/* logo upload overlay (admin mode only) */
+.admin-mode .hero-mark{
+  position:relative;cursor:pointer;
+}
+.admin-mode .hero-mark::after{
+  content:'[ click to upload logo ]';
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);font-size:var(--text-xs);
+  letter-spacing:0.12em;color:var(--green);
+  background:var(--green-d);
+  border:1px dashed var(--green-b);
+  border-radius:var(--r-sm);
+  pointer-events:none;
+}
 
 /* ── RESPONSIVE ── */
 @media(max-width:600px){
