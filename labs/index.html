@@ -3,81 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ARMGDN LABS</title>
-  <meta name="description" content="ARMGDN Labs — browser tools for producers." />
+  <title>ARMGDN Labs</title>
+  <meta name="description" content="ARMGDN Labs — browser tools for producers. Free, open, no signup." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css" />
 </head>
 <body>
+  <a href="#main" class="sr-only">Skip to content</a>
   <header class="site-header">
     <div class="header-inner">
-      <a href="/" class="logo" aria-label="ARMGDN home">
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <rect x="1" y="1" width="30" height="30" rx="2" stroke="currentColor" stroke-width="1.5"/>
-          <text x="16" y="22" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="11" fill="currentColor" letter-spacing="1">ARM</text>
-        </svg>
-        <span class="logo-text">ARMGDN / LABS</span>
-      </a>
-      <nav class="main-nav" aria-label="Site navigation">
-        <a href="/" class="nav-link">HOME</a>
-        <a href="/records/" class="nav-link">RECORDS</a>
-        <a href="/studios/" class="nav-link">STUDIOS</a>
+      <a href="/" class="wordmark">ARMGDN</a>
+      <nav class="main-nav">
+        <a href="/labs/" class="nav-link" aria-current="page" style="color:var(--text);">Labs</a>
+        <a href="/records/" class="nav-link">Records</a>
+        <a href="/studios/" class="nav-link">Studios</a>
       </nav>
       <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
     </div>
   </header>
-  <main>
-    <section class="hero" style="min-height:40dvh">
-      <div class="hero-scan"></div>
-      <div class="hero-inner" style="padding-top: var(--space-16); padding-bottom: var(--space-16);">
-        <div class="hero-eyebrow"><span class="dot"></span> ARMGDN LABS // TOOL DIRECTORY</div>
-        <h1 style="font-family: var(--font-mono); font-size: var(--text-2xl); font-weight:400; letter-spacing:0.06em; color: var(--text); margin-bottom: var(--space-3);">LABS</h1>
-        <p style="color: var(--text-muted); font-size: var(--text-base); max-width: 52ch;">Browser tools for producers. Open, free, and built for the creative process — not the corporate workflow.</p>
+  <main id="main">
+    <section class="page-hero">
+      <div class="grain"></div>
+      <div class="page-hero-inner">
+        <p class="page-eyebrow">// ARMGDN Labs</p>
+        <h1 class="page-title">Tools</h1>
+        <p class="page-sub">Browser tools built for producers and creators. Free to use, no account needed.</p>
       </div>
     </section>
-    <section class="tools-preview" style="border-top: 1px solid var(--border);">
-      <div class="tools-inner">
-        <p class="section-label">// ALL TOOLS</p>
-        <div class="tools-list">
-          <div class="tool-row">
-            <span class="tool-id mono">TOOL_001</span>
-            <span class="tool-name">Pocket Radio FM</span>
-            <span class="tool-tag">RADIO</span>
-            <span class="tool-status active">LIVE</span>
-          </div>
-          <div class="tool-row">
-            <span class="tool-id mono">TOOL_002</span>
-            <span class="tool-name">Kit Foundry</span>
-            <span class="tool-tag">SAMPLER</span>
-            <span class="tool-status building">IN DEV</span>
-          </div>
-          <div class="tool-row">
-            <span class="tool-id mono">TOOL_003</span>
-            <span class="tool-name">DG-101 Drum Groove</span>
-            <span class="tool-tag">SEQUENCER</span>
-            <span class="tool-status building">IN DEV</span>
-          </div>
-          <div class="tool-row faded">
-            <span class="tool-id mono">TOOL_???</span>
-            <span class="tool-name">???</span>
-            <span class="tool-tag">UNKNOWN</span>
-            <span class="tool-status locked">LOCKED</span>
+    <section class="tools-strip" style="border-bottom:none;">
+      <div class="strip-inner">
+        <p class="strip-label mono">// All tools</p>
+        <div class="strip-list">
+          <a href="https://github.com/armgdnlabs/pocket-radio-fm" target="_blank" rel="noopener noreferrer" class="strip-row" style="text-decoration:none;">
+            <div class="strip-meta">
+              <span class="strip-id mono">001</span>
+              <span class="strip-tag mono">Radio</span>
+            </div>
+            <span class="strip-name">Pocket Radio FM</span>
+            <span class="strip-status live">Live</span>
+          </a>
+          <a href="https://github.com/armgdnlabs/kit-foundry" target="_blank" rel="noopener noreferrer" class="strip-row" style="text-decoration:none;">
+            <div class="strip-meta">
+              <span class="strip-id mono">002</span>
+              <span class="strip-tag mono">Sampler</span>
+            </div>
+            <span class="strip-name">Kit Foundry</span>
+            <span class="strip-status dev">Beta</span>
+          </a>
+          <a href="https://github.com/armgdnlabs/chord-codes-101" target="_blank" rel="noopener noreferrer" class="strip-row" style="text-decoration:none;">
+            <div class="strip-meta">
+              <span class="strip-id mono">003</span>
+              <span class="strip-tag mono">Theory</span>
+            </div>
+            <span class="strip-name">Chord Codes 101</span>
+            <span class="strip-status dev">Beta</span>
+          </a>
+          <div class="strip-row faded">
+            <div class="strip-meta">
+              <span class="strip-id mono">???</span>
+              <span class="strip-tag mono">???</span>
+            </div>
+            <span class="strip-name">More coming</span>
+            <span class="strip-status tba">&mdash;</span>
           </div>
         </div>
       </div>
     </section>
-    <section class="signal-strip">
-      <div class="signal-inner">
-        <span class="mono faint">ARMGDN LABS // 2026</span>
-        <div class="signal-links">
-          <a href="/" class="signal-link">← HOME</a>
-        </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="footer-wordmark mono">ARMGDN</span>
+        <p class="footer-slogan">The Chaos to Create.</p>
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="/records/">Records</a>
+          <a href="/studios/">Studios</a>
+          <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </nav>
+        <p class="footer-copy mono">ARMGDN &copy; 2026</p>
       </div>
-    </section>
+    </footer>
   </main>
   <script src="../script.js"></script>
 </body>

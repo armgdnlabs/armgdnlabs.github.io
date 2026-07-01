@@ -1,35 +1,31 @@
 # ARMGDN
 
-> 𝖄𝖔𝖓𝖉𝖗 & ARMGDN — Music. Tools. Art.
+**The Chaos to Create.**
 
-Home base for the ARMGDN universe.
+ARMGDN is a small independent universe of tools, music, and art.
+Everything here is free or pay-what-you-want.
+Built by one person, shared with anyone who finds it useful.
 
-## Structure
+---
 
-```
-armgdnlabs.github.io/
-├── index.html          → Main hub
-├── styles.css          → Shared design system
-├── script.js           → Shared JS (theme toggle, interactions)
-├── labs/               → ARMGDN Labs — browser tools for producers
-├── records/            → ARMGDN Records — music releases
-└── studios/            → ARMGDN Studios — art & visual design
-```
+## What's here
 
-## Design system
-- **Fonts:** Share Tech Mono (terminal/display) + Space Grotesk (body/UI)
-- **Accent:** Phosphor green `#39ff87` (dark) / `#007a3a` (light)
-- **Vibe:** Terminalcore · Y2K · Discman era · Synth-wave · Indie cyberpunk
-- **Hosting:** GitHub Pages — `armgdnlabs.github.io`
+| | |
+|---|---|
+| [Labs](https://armgdnlabs.github.io/labs/) | Browser tools for producers — samplers, radio, theory helpers |
+| [Records](https://armgdnlabs.github.io/records/) | Music releases |
+| [Studios](https://armgdnlabs.github.io/studios/) | Art direction and visual work |
 
-## Add a new tool
-1. Create a folder: `labs/tool-name/`
-2. Add `index.html` — link `../styles.css` and `../script.js`
-3. Add a row to the tools list in `index.html` and `labs/index.html`
-4. Commit and push — GitHub Pages deploys automatically
+---
 
-## Migrate from Lovable / Base44
-1. Export / sync project to a new GitHub repo (`armgdnlabs/tool-name`)
-2. Check if it runs as a static app
-3. If static: copy into `labs/tool-name/` here, or keep as standalone repo and link from Labs
-4. If needs backend: keep on original host, add entry row in Labs directory pointing to the live URL
+## Tools
+
+| Tool | Status | Repo |
+|---|---|---|
+| Pocket Radio FM | Live | [armgdnlabs/pocket-radio-fm](https://github.com/armgdnlabs/pocket-radio-fm) |
+| Kit Foundry | Beta | [armgdnlabs/kit-foundry](https://github.com/armgdnlabs/kit-foundry) |
+| Chord Codes 101 | Beta | [armgdnlabs/chord-codes-101](https://github.com/armgdnlabs/chord-codes-101) |
+
+---
+
+Visit: [armgdnlabs.github.io](https://armgdnlabs.github.io)
