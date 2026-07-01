@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARMGDN</title>
+  <meta name="description" content="ARMGDN — Labs, Records, Studios. Home of 𝖄𝖔𝖓𝖉𝖗." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="ARMGDN home">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <text x="16" y="22" text-anchor="middle" font-family="Share Tech Mono, monospace" font-size="11" fill="currentColor" letter-spacing="1">ARM</text>
+        </svg>
+        <span class="logo-text">ARMGDN</span>
+      </a>
+      <nav class="main-nav" aria-label="Site navigation">
+        <a href="/labs/" class="nav-link">LABS</a>
+        <a href="/records/" class="nav-link">RECORDS</a>
+        <a href="/studios/" class="nav-link">STUDIOS</a>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-scan"></div>
+      <div class="hero-inner">
+        <div class="hero-eyebrow"><span class="dot"></span> SYSTEM ONLINE // ARMGDN.IO</div>
+        <h1 class="hero-title">𝖄𝖔𝖓𝖉𝖗</h1>
+        <p class="hero-sub">Music. Tools. Art. One universe.</p>
+        <div class="hero-status">
+          <span class="status-item"><span class="mono">LAB_STATUS:</span> <span class="accent">ACTIVE</span></span>
+          <span class="status-sep">//</span>
+          <span class="status-item"><span class="mono">SIGNAL:</span> <span class="accent">LOCKED</span></span>
+          <span class="status-sep">//</span>
+          <span class="status-item"><span class="mono">ERA:</span> <span class="accent">00–NOW</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVISIONS -->
+    <section class="divisions">
+      <div class="divisions-inner">
+        <p class="section-label">// DIVISIONS</p>
+        <div class="division-grid">
+
+          <a href="/labs/" class="division-card" data-division="labs">
+            <div class="card-tag">01</div>
+            <div class="card-body">
+              <h2 class="card-title">ARMGDN LABS</h2>
+              <p class="card-desc">Browser tools for producers. Visualizers, kit builders, sequencers, theory tools. Built in the open.</p>
+            </div>
+            <div class="card-footer">
+              <span class="card-cta">ENTER LAB →</span>
+              <span class="card-status blink">●&nbsp;LIVE</span>
+            </div>
+          </a>
+
+          <a href="/records/" class="division-card" data-division="records">
+            <div class="card-tag">02</div>
+            <div class="card-body">
+              <h2 class="card-title">ARMGDN RECORDS</h2>
+              <p class="card-desc">Releases, projects, and sounds from 𝖄𝖔𝖓𝖉𝖗 and the ARMGDN collective.</p>
+            </div>
+            <div class="card-footer">
+              <span class="card-cta">SEE RELEASES →</span>
+              <span class="card-status">○&nbsp;COMING</span>
+            </div>
+          </a>
+
+          <a href="/studios/" class="division-card" data-division="studios">
+            <div class="card-tag">03</div>
+            <div class="card-body">
+              <h2 class="card-title">ARMGDN STUDIOS</h2>
+              <p class="card-desc">Art direction, visual identity, motion, and design. Branding for artists and independents.</p>
+            </div>
+            <div class="card-footer">
+              <span class="card-cta">VIEW WORK →</span>
+              <span class="card-status">○&nbsp;COMING</span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- LABS PREVIEW -->
+    <section class="tools-preview">
+      <div class="tools-inner">
+        <p class="section-label">// ARMGDN LABS — RECENT TOOLS</p>
+        <div class="tools-list" id="tools-list">
+          <div class="tool-row">
+            <span class="tool-id mono">TOOL_001</span>
+            <span class="tool-name">Pocket Radio FM</span>
+            <span class="tool-tag">RADIO</span>
+            <span class="tool-status active">LIVE</span>
+          </div>
+          <div class="tool-row">
+            <span class="tool-id mono">TOOL_002</span>
+            <span class="tool-name">Kit Foundry</span>
+            <span class="tool-tag">SAMPLER</span>
+            <span class="tool-status building">IN DEV</span>
+          </div>
+          <div class="tool-row">
+            <span class="tool-id mono">TOOL_003</span>
+            <span class="tool-name">DG-101 Drum Groove</span>
+            <span class="tool-tag">SEQUENCER</span>
+            <span class="tool-status building">IN DEV</span>
+          </div>
+          <div class="tool-row faded">
+            <span class="tool-id mono">TOOL_???</span>
+            <span class="tool-name">???</span>
+            <span class="tool-tag">UNKNOWN</span>
+            <span class="tool-status locked">LOCKED</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SIGNAL FOOTER -->
+    <section class="signal-strip">
+      <div class="signal-inner">
+        <span class="mono faint">𝖄𝖔𝖓𝖉𝖗 &amp; ARMGDN // ALL SYSTEMS // 2016–2026</span>
+        <div class="signal-links">
+          <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer" class="signal-link">GH</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
