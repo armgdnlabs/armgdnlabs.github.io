@@ -9,10 +9,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css?v=5"/>
+  <link rel="stylesheet" href="../styles.css?v=7"/>
 </head>
-<body>
+<body data-page-id="labs">
   <a href="#main" class="sr-only">Skip to content</a>
+
+  <canvas class="bg-canvas" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
   <header class="site-header">
     <div class="header-inner">
       <a href="/" class="wordmark">ARMGDN</a>
@@ -25,16 +29,18 @@
       <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
   </header>
+
   <main id="main">
     <section class="page-hero">
       <div class="grain"></div>
       <div class="page-hero-inner">
         <p class="page-eyebrow mono">// ARMGDN Labs</p>
         <h1 class="page-title">Tools</h1>
-        <p class="page-sub" data-editable>Browser tools for producers and creators. Free, no account needed.</p>
+        <p class="page-sub" data-editable data-key="labs-sub">Browser tools for producers and creators. Free, no account needed.</p>
       </div>
     </section>
-    <section class="tools-strip" style="border-bottom:none;">
+
+    <section class="tools-strip reveal" style="border-bottom:none;">
       <div class="strip-inner">
         <p class="strip-label mono">// All tools</p>
         <div class="strip-list">
@@ -62,6 +68,7 @@
       </div>
     </section>
   </main>
+
   <footer class="site-footer">
     <div class="footer-inner">
       <span class="footer-wordmark mono">ARMGDN</span>
@@ -74,6 +81,8 @@
       <p class="footer-copy mono">ARMGDN &copy; 2026 &mdash; free / pay what you want <span class="footer-pulse">&#9632;</span></p>
     </div>
   </footer>
+
+  <!-- ADMIN LOGIN MODAL -->
   <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login" id="admin-login-modal">
     <div class="admin-login-box">
       <h3>// ADMIN_ACCESS</h3>
@@ -86,11 +95,14 @@
       </div>
     </div>
   </div>
+
+  <!-- ADMIN BAR -->
   <div class="admin-bar" id="admin-bar">
-    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit</span>
+    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit &mdash; <a href="/admin/" style="color:var(--green);text-decoration:underline;">Dashboard</a></span>
     <button id="admin-save-btn" class="admin-btn">Save Changes</button>
     <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
   </div>
-  <script src="../script.js?v=5"></script>
+
+  <script src="../script.js?v=7"></script>
 </body>
 </html>

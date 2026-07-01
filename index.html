@@ -9,9 +9,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=6"/>
+  <link rel="stylesheet" href="styles.css?v=7"/>
 </head>
-<body>
+<body data-page-id="home">
   <a href="#main" class="sr-only">Skip to content</a>
 
   <canvas class="bg-canvas" aria-hidden="true"></canvas>
@@ -39,8 +39,8 @@
           <div class="mark-placeholder">[ logo ]</div>
         </div>
         <p class="hero-eyebrow mono" aria-hidden="true"><span class="typewriter"></span></p>
-        <h1 class="hero-heading glitch" data-text="The Chaos to Create." data-editable>The Chaos<br><em>to Create.</em></h1>
-        <p class="hero-body" data-editable>Tools, music, and art for independent creators.<br>Free to use, made with care.</p>
+        <h1 class="hero-heading glitch" data-text="The Chaos to Create." data-editable data-key="hero-heading">The Chaos<br><em>to Create.</em></h1>
+        <p class="hero-body" data-editable data-key="hero-body">Tools, music, and art for independent creators.<br>Free to use, made with care.</p>
         <div class="hero-links">
           <a href="labs/" class="btn btn-primary">Enter Labs</a>
         </div>
@@ -53,8 +53,8 @@
 
     <section class="about reveal">
       <div class="about-inner">
-        <p class="about-text" data-editable>Make cool stuff. Share it. That&rsquo;s the whole thing.</p>
-        <p class="about-aside mono" data-editable>// free / pay what you want</p>
+        <p class="about-text" data-editable data-key="about-text">Make cool stuff. Share it. That&rsquo;s the whole thing.</p>
+        <p class="about-aside mono" data-editable data-key="about-aside">// free / pay what you want</p>
       </div>
     </section>
 
@@ -63,19 +63,19 @@
         <a href="labs/" class="div-card">
           <div class="div-num mono">01</div>
           <h2 class="div-title">ARMGDN<br>Labs</h2>
-          <p class="div-body" data-editable>Browser tools for producers. Visualizers, kit builders, samplers, theory tools. No signup.</p>
+          <p class="div-body" data-editable data-key="div-labs">Browser tools for producers. Visualizers, kit builders, samplers, theory tools. No signup.</p>
           <span class="div-link">Tools &rarr;</span>
         </a>
         <a href="records/" class="div-card">
           <div class="div-num mono">02</div>
           <h2 class="div-title">ARMGDN<br>Records</h2>
-          <p class="div-body" data-editable>Music from the ARMGDN universe. R&amp;B, neo-soul, electronic. Releases when they&rsquo;re ready.</p>
+          <p class="div-body" data-editable data-key="div-records">Music from the ARMGDN universe. R&amp;B, neo-soul, electronic. Releases when they&rsquo;re ready.</p>
           <span class="div-link">Releases &rarr;</span>
         </a>
         <a href="studios/" class="div-card">
           <div class="div-num mono">03</div>
           <h2 class="div-title">ARMGDN<br>Studios</h2>
-          <p class="div-body" data-editable>Art direction and visual identity. Branding for independent artists and labels.</p>
+          <p class="div-body" data-editable data-key="div-studios">Art direction and visual identity. Branding for independent artists and labels.</p>
           <span class="div-link">Work &rarr;</span>
         </a>
       </div>
@@ -141,11 +141,11 @@
 
   <!-- ADMIN BAR -->
   <div class="admin-bar" id="admin-bar">
-    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit &mdash; <a href="admin/" style="color:var(--green);text-decoration:underline;">Open Dashboard</a></span>
+    <span class="admin-note">// ADMIN MODE &mdash; click outlined text to edit &mdash; <a href="/admin/" style="color:var(--green);text-decoration:underline;">Dashboard</a></span>
     <button id="admin-save-btn" class="admin-btn">Save Changes</button>
     <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
   </div>
 
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
