@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ARMGDN Records</title>
-  <meta name="description" content="ARMGDN Records — music from the ARMGDN universe." />
+  <meta name="description" content="ARMGDN Records — music releases."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../styles.css"/>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to content</a>
@@ -17,53 +17,110 @@
       <a href="/" class="wordmark">ARMGDN</a>
       <nav class="main-nav">
         <a href="/labs/" class="nav-link">Labs</a>
-        <a href="/records/" class="nav-link" aria-current="page" style="color:var(--text);">Records</a>
+        <a href="/records/" class="nav-link" aria-current="page">Records</a>
         <a href="/studios/" class="nav-link">Studios</a>
       </nav>
-      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
   </header>
   <main id="main">
     <section class="page-hero">
       <div class="grain"></div>
       <div class="page-hero-inner">
-        <!-- REPLACE: add artist photo or artwork here -->
+        <!-- REPLACE: artist photo or label mark here -->
         <p class="page-eyebrow">// ARMGDN Records</p>
         <h1 class="page-title">Music</h1>
-        <p class="page-sub">Releases from the ARMGDN universe. Alternative R&amp;B, neo-soul, and electronic. Pay what you want.</p>
+        <p class="page-sub" data-editable>Releases from the ARMGDN universe. Pay what you want.</p>
       </div>
     </section>
-    <section class="tools-strip" style="border-bottom:none;">
+
+    <!-- ARTIST ROSTER -->
+    <section class="tools-strip">
       <div class="strip-inner">
-        <p class="strip-label mono">// Releases</p>
+        <p class="strip-label mono">// Artists</p>
         <div class="strip-list">
+          <!-- ADD artist rows here. Pattern:
+          <a href="records/yondr/" class="strip-row">
+            <div class="strip-meta"><span class="strip-id mono">ART_01</span><span class="strip-tag mono">Producer</span></div>
+            <span class="strip-name">𝖄𝖔𝖓𝖉𝖗</span>
+            <span class="strip-status live">Active</span>
+          </a>
+          -->
           <div class="strip-row faded">
-            <div class="strip-meta">
-              <span class="strip-id mono">REL_01</span>
-              <span class="strip-tag mono">TBA</span>
-            </div>
-            <span class="strip-name">First release coming</span>
-            <span class="strip-status tba">&mdash;</span>
+            <div class="strip-meta"><span class="strip-id mono">ART_01</span><span class="strip-tag mono">Producer</span></div>
+            <span class="strip-name">𝖄𝖔𝖓𝖉𝖗</span>
+            <span class="strip-status tba">Releases soon</span>
           </div>
         </div>
-        <!-- REPLACE: swap the strip-list above with actual releases when ready -->
       </div>
     </section>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span class="footer-wordmark mono">ARMGDN</span>
-        <p class="footer-slogan">The Chaos to Create.</p>
-        <nav class="footer-nav">
-          <a href="/">Home</a>
-          <a href="/labs/">Labs</a>
-          <a href="/studios/">Studios</a>
-        </nav>
-        <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+
+    <!-- RELEASE GRID -->
+    <section class="release-grid">
+      <div class="release-grid-inner">
+        <h2 class="mono">// Releases</h2>
+        <div class="release-list">
+
+          <!-- ════════════════════════════════════════
+               RELEASE CARD TEMPLATE
+               Duplicate this block for each release.
+               ════════════════════════════════════════
+          <a href="records/releases/release-slug/" class="release-card">
+            <div class="release-cover">
+              <img src="../../assets/covers/release-slug.jpg" alt="Release title cover art" width="400" height="400" loading="lazy">
+            </div>
+            <div class="release-meta">
+              <span class="release-type mono">EP</span>
+              <span class="release-title">Release Title</span>
+              <span class="release-artist">𝖄𝖔𝖓𝖉𝖗</span>
+              <span class="release-year">2026</span>
+            </div>
+          </a>
+          ──────────────────────────────────────────── -->
+
+          <!-- PLACEHOLDER CARD -->
+          <div class="release-card" style="opacity:0.25;pointer-events:none;">
+            <div class="release-cover">
+              <div class="cover-placeholder">[ cover ]</div>
+            </div>
+            <div class="release-meta">
+              <span class="release-type mono">???</span>
+              <span class="release-title">First release</span>
+              <span class="release-artist">𝖄𝖔𝖓𝖉𝖗</span>
+              <span class="release-year">TBA</span>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </footer>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-wordmark mono">ARMGDN</span>
+      <p class="footer-slogan">The Chaos to Create.</p>
+      <nav class="footer-nav">
+        <a href="/">Home</a><a href="/labs/">Labs</a><a href="/studios/">Studios</a>
+      </nav>
+      <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+    </div>
+  </footer>
+  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login">
+    <div class="admin-login-box">
+      <h3>// ADMIN_ACCESS</h3>
+      <input type="password" class="admin-input" placeholder="password" autocomplete="current-password"/>
+      <p class="admin-err"></p>
+      <div style="display:flex;gap:0.5rem;">
+        <button id="admin-login-btn" class="btn btn-primary" style="flex:1;">Enter</button>
+        <button id="admin-cancel-btn" class="btn btn-ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div class="admin-bar">
+    <span class="admin-note">// ADMIN MODE — click outlined text to edit</span>
+    <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
+  </div>
   <script src="../script.js"></script>
 </body>
 </html>

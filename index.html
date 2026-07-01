@@ -1,175 +1,145 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ARMGDN</title>
-  <meta name="description" content="ARMGDN — The Chaos to Create. Tools, music, and art for independent creators." />
+  <meta name="description" content="ARMGDN — The Chaos to Create."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-
-  <!-- SKIP LINK -->
   <a href="#main" class="sr-only">Skip to content</a>
 
   <header class="site-header">
     <div class="header-inner">
-      <!-- REPLACE: swap span below with <img src="assets/logo.svg" alt="ARMGDN" height="28"> or your actual wordmark -->
-      <a href="/" class="wordmark" aria-label="ARMGDN — home">
-        <span class="wordmark-text">ARMGDN</span>
-      </a>
+      <!-- REPLACE: swap .wordmark text with <img src="assets/logo.svg" alt="ARMGDN" height="22"> -->
+      <a href="/" class="wordmark" aria-label="ARMGDN — home">ARMGDN</a>
       <nav class="main-nav" aria-label="Main">
-        <a href="/labs/" class="nav-link">Labs</a>
-        <a href="/records/" class="nav-link">Records</a>
-        <a href="/studios/" class="nav-link">Studios</a>
+        <a href="labs/" class="nav-link">Labs</a>
+        <a href="records/" class="nav-link">Records</a>
+        <a href="studios/" class="nav-link">Studios</a>
       </nav>
-      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
   </header>
 
   <main id="main">
 
-    <!-- HERO -->
     <section class="hero">
       <div class="grain"></div>
       <div class="hero-inner">
-
-        <!-- REPLACE: drop in a custom logo/mark/image here if you have one -->
         <div class="hero-mark" aria-hidden="true">
-          <div class="mark-placeholder">[ A ]</div>
+          <!-- REPLACE: <img src="assets/logo.svg" alt="ARMGDN" height="48" loading="lazy"> -->
+          <div class="mark-placeholder">[ logo ]</div>
         </div>
-
-        <h1 class="hero-heading">The Chaos<br><em>to Create.</em></h1>
-        <p class="hero-body">Tools, music, and art made for independent creators.<br>Free to use, made with care.</p>
-
+        <h1 class="hero-heading" data-editable>The Chaos<br><em>to Create.</em></h1>
+        <p class="hero-body" data-editable>Tools, music, and art for independent creators.<br>Free to use, made with care.</p>
+        <div class="hero-links">
+          <a href="labs/" class="btn btn-primary">Enter Labs</a>
+          <a href="records/" class="btn btn-ghost">Music</a>
+        </div>
         <div class="hero-tape" aria-hidden="true">
-          <span>ARMGDN &mdash;</span>
-          <span>LABS &mdash;</span>
-          <span>RECORDS &mdash;</span>
-          <span>STUDIOS &mdash;</span>
-          <span>ARMGDN &mdash;</span>
-          <span>LABS &mdash;</span>
-          <span>RECORDS &mdash;</span>
-          <span>STUDIOS &mdash;</span>
+          <span>ARMGDN &mdash;</span><span>LABS &mdash;</span><span>RECORDS &mdash;</span><span>STUDIOS &mdash;</span>
+          <span>ARMGDN &mdash;</span><span>LABS &mdash;</span><span>RECORDS &mdash;</span><span>STUDIOS &mdash;</span>
         </div>
-
       </div>
     </section>
 
-    <!-- WHAT THIS IS -->
     <section class="about">
       <div class="about-inner">
-        <p class="about-text">Make cool stuff. Share it. That&rsquo;s the whole thing. ARMGDN is a home for tools, sounds, and visuals built by one person and offered to whoever can use them.</p>
-        <p class="about-aside mono">// free / pay what you want</p>
+        <p class="about-text" data-editable>Make cool stuff. Share it. That&rsquo;s the whole thing.</p>
+        <p class="about-aside mono" data-editable>// free / pay what you want</p>
       </div>
     </section>
 
-    <!-- DIVISIONS -->
     <section class="divisions">
       <div class="divisions-inner">
-
-        <article class="div-card" data-div="labs">
+        <a href="labs/" class="div-card">
           <div class="div-num mono">01</div>
-          <div class="div-content">
-            <!-- REPLACE: <img src="assets/labs-mark.png" alt="" class="div-mark" loading="lazy"> -->
-            <h2 class="div-title">ARMGDN<br>Labs</h2>
-            <p class="div-body">Browser tools for producers. Visualizers, kit builders, samplers, theory helpers. Open to use, no signup.</p>
-            <a href="/labs/" class="div-link">See tools &rarr;</a>
-          </div>
-        </article>
-
-        <article class="div-card" data-div="records">
+          <h2 class="div-title">ARMGDN<br>Labs</h2>
+          <p class="div-body" data-editable>Browser tools for producers. Visualizers, kit builders, samplers, theory tools. No signup.</p>
+          <span class="div-link">Tools &rarr;</span>
+        </a>
+        <a href="records/" class="div-card">
           <div class="div-num mono">02</div>
-          <div class="div-content">
-            <!-- REPLACE: <img src="assets/records-mark.png" alt="" class="div-mark" loading="lazy"> -->
-            <h2 class="div-title">ARMGDN<br>Records</h2>
-            <p class="div-body">Music from the ARMGDN universe. Alternative R&amp;B, neo-soul, electronic. Releases when they&rsquo;re ready.</p>
-            <a href="/records/" class="div-link">Releases &rarr;</a>
-          </div>
-        </article>
-
-        <article class="div-card" data-div="studios">
+          <h2 class="div-title">ARMGDN<br>Records</h2>
+          <p class="div-body" data-editable>Music from the ARMGDN universe. R&amp;B, neo-soul, electronic. Releases when they&rsquo;re ready.</p>
+          <span class="div-link">Releases &rarr;</span>
+        </a>
+        <a href="studios/" class="div-card">
           <div class="div-num mono">03</div>
-          <div class="div-content">
-            <!-- REPLACE: <img src="assets/studios-mark.png" alt="" class="div-mark" loading="lazy"> -->
-            <h2 class="div-title">ARMGDN<br>Studios</h2>
-            <p class="div-body">Art direction and visual identity. Branding for artists and independent projects.</p>
-            <a href="/studios/" class="div-link">View work &rarr;</a>
-          </div>
-        </article>
-
+          <h2 class="div-title">ARMGDN<br>Studios</h2>
+          <p class="div-body" data-editable>Art direction and visual identity. Branding for independent artists and labels.</p>
+          <span class="div-link">Work &rarr;</span>
+        </a>
       </div>
     </section>
 
-    <!-- LABS TOOLS STRIP -->
     <section class="tools-strip">
       <div class="strip-inner">
         <p class="strip-label mono">// From the lab</p>
         <div class="strip-list">
-
-          <div class="strip-row">
-            <div class="strip-meta">
-              <span class="strip-id mono">001</span>
-              <span class="strip-tag mono">Radio</span>
-            </div>
+          <a href="https://pocket-radio-fm.lovable.app" target="_blank" rel="noopener noreferrer" class="strip-row">
+            <div class="strip-meta"><span class="strip-id mono">001</span><span class="strip-tag mono">Radio</span></div>
             <span class="strip-name">Pocket Radio FM</span>
             <span class="strip-status live">Live</span>
-          </div>
-
-          <div class="strip-row">
-            <div class="strip-meta">
-              <span class="strip-id mono">002</span>
-              <span class="strip-tag mono">Sampler</span>
-            </div>
+          </a>
+          <a href="https://kit-foundry.lovable.app" target="_blank" rel="noopener noreferrer" class="strip-row">
+            <div class="strip-meta"><span class="strip-id mono">002</span><span class="strip-tag mono">Sampler</span></div>
             <span class="strip-name">Kit Foundry</span>
             <span class="strip-status dev">Beta</span>
-          </div>
-
-          <div class="strip-row">
-            <div class="strip-meta">
-              <span class="strip-id mono">003</span>
-              <span class="strip-tag mono">Theory</span>
-            </div>
+          </a>
+          <a href="https://chord-codes-101.lovable.app" target="_blank" rel="noopener noreferrer" class="strip-row">
+            <div class="strip-meta"><span class="strip-id mono">003</span><span class="strip-tag mono">Theory</span></div>
             <span class="strip-name">Chord Codes 101</span>
             <span class="strip-status dev">Beta</span>
-          </div>
-
+          </a>
           <div class="strip-row faded">
-            <div class="strip-meta">
-              <span class="strip-id mono">???</span>
-              <span class="strip-tag mono">???</span>
-            </div>
+            <div class="strip-meta"><span class="strip-id mono">???</span><span class="strip-tag mono">???</span></div>
             <span class="strip-name">More coming</span>
             <span class="strip-status tba">&mdash;</span>
           </div>
-
         </div>
-        <a href="/labs/" class="strip-cta">All tools &rarr;</a>
+        <a href="labs/" class="strip-cta">All tools &rarr;</a>
       </div>
     </section>
 
-    <!-- FOOTER -->
     <footer class="site-footer">
       <div class="footer-inner">
-        <!-- REPLACE: <img src="assets/logo-footer.svg" alt="ARMGDN" height="20" loading="lazy"> -->
         <span class="footer-wordmark mono">ARMGDN</span>
         <p class="footer-slogan">The Chaos to Create.</p>
-        <nav class="footer-nav" aria-label="Footer">
-          <a href="/labs/">Labs</a>
-          <a href="/records/">Records</a>
-          <a href="/studios/">Studios</a>
+        <nav class="footer-nav">
+          <a href="labs/">Labs</a>
+          <a href="records/">Records</a>
+          <a href="studios/">Studios</a>
           <a href="https://github.com/armgdnlabs" target="_blank" rel="noopener noreferrer">GitHub</a>
         </nav>
         <p class="footer-copy mono">ARMGDN &copy; 2026 &mdash; free / pay what you want</p>
       </div>
     </footer>
-
   </main>
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login">
+    <div class="admin-login-box">
+      <h3>// ADMIN_ACCESS</h3>
+      <input type="password" class="admin-input" placeholder="password" autocomplete="current-password"/>
+      <p class="admin-err"></p>
+      <div style="display:flex;gap:0.5rem;">
+        <button id="admin-login-btn" class="btn btn-primary" style="flex:1;">Enter</button>
+        <button id="admin-cancel-btn" class="btn btn-ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN BAR -->
+  <div class="admin-bar">
+    <span class="admin-note">// ADMIN MODE — click any outlined text to edit</span>
+    <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
+  </div>
 
   <script src="script.js"></script>
 </body>

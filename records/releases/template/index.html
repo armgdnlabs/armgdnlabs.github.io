@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<!--
+  RELEASE PAGE TEMPLATE
+  Duplicate this folder, rename to your release slug, fill in the fields marked FILL.
+  Required assets: cover art at ../../../assets/covers/[slug].jpg (1:1, min 800px)
+-->
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Release Title — ARMGDN Records</title><!-- FILL -->
+  <meta name="description" content=""/><!-- FILL -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../styles.css"/>
+</head>
+<body>
+  <a href="#main" class="sr-only">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="wordmark">ARMGDN</a>
+      <nav class="main-nav">
+        <a href="/labs/" class="nav-link">Labs</a>
+        <a href="/records/" class="nav-link" aria-current="page">Records</a>
+        <a href="/studios/" class="nav-link">Studios</a>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
+    </div>
+  </header>
+  <main id="main">
+    <section class="release-detail">
+      <div class="release-detail-inner">
+
+        <div class="release-art">
+          <!-- FILL: replace src with actual cover path -->
+          <div class="cover-placeholder" style="width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;">[ cover art ]</div>
+          <!-- <img src="../../../assets/covers/release-slug.jpg" alt="Cover art for Release Title" width="800" height="800" loading="lazy"> -->
+        </div>
+
+        <div class="release-info">
+          <span class="type mono">EP</span><!-- FILL: Album / EP / Single / Mixtape -->
+          <h1 class="title">Release Title</h1><!-- FILL -->
+          <p class="artist mono">𝖄𝖔𝖓𝖉𝖗</p><!-- FILL: artist name -->
+          <p class="release-desc"><!-- FILL: short description, 1-3 sentences -->
+            A short description of the release. What it feels like, what it came from.
+          </p>
+
+          <!-- Streaming links -->
+          <div class="release-links">
+            <!-- FILL: add/remove as needed -->
+            <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Stream</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Download</a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Bandcamp</a>
+          </div>
+
+          <!-- Tracklist -->
+          <div class="tracklist">
+            <!-- FILL: duplicate .track-row for each track -->
+            <div class="track-row">
+              <span class="track-num">1</span>
+              <span class="track-title">Track Name</span>
+              <span class="track-dur">0:00</span>
+            </div>
+            <div class="track-row">
+              <span class="track-num">2</span>
+              <span class="track-title">Track Name</span>
+              <span class="track-dur">0:00</span>
+            </div>
+          </div>
+
+          <!-- Credits -->
+          <p class="release-credits mono">
+            <!-- FILL -->
+            Written &amp; produced by 𝖄𝖔𝖓𝖉𝖗<br>
+            Mastered by —<br>
+            &copy; 2026 ARMGDN Records
+          </p>
+        </div>
+
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-wordmark mono">ARMGDN</span>
+      <p class="footer-slogan">The Chaos to Create.</p>
+      <nav class="footer-nav">
+        <a href="/records/">&larr; All releases</a>
+        <a href="/">Home</a>
+      </nav>
+      <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+    </div>
+  </footer>
+  <script src="../../../script.js"></script>
+</body>
+</html>

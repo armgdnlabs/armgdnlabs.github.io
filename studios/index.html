@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ARMGDN Studios</title>
-  <meta name="description" content="ARMGDN Studios — art direction and visual design." />
+  <meta name="description" content="ARMGDN Studios — art direction and visual design."/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="../styles.css"/>
 </head>
 <body>
   <a href="#main" class="sr-only">Skip to content</a>
@@ -18,11 +18,9 @@
       <nav class="main-nav">
         <a href="/labs/" class="nav-link">Labs</a>
         <a href="/records/" class="nav-link">Records</a>
-        <a href="/studios/" class="nav-link" aria-current="page" style="color:var(--text);">Studios</a>
+        <a href="/studios/" class="nav-link" aria-current="page">Studios</a>
       </nav>
-      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
     </div>
   </header>
   <main id="main">
@@ -31,38 +29,100 @@
       <div class="page-hero-inner">
         <p class="page-eyebrow">// ARMGDN Studios</p>
         <h1 class="page-title">Art &amp; Design</h1>
-        <p class="page-sub">Art direction, visual identity, and branding for independent artists and labels.</p>
+        <p class="page-sub" data-editable>Art direction, visual identity, and branding for independent artists.</p>
       </div>
     </section>
-    <section class="tools-strip" style="border-bottom:none;">
-      <div class="strip-inner">
-        <p class="strip-label mono">// Work</p>
-        <div class="strip-list">
-          <div class="strip-row faded">
-            <div class="strip-meta">
-              <span class="strip-id mono">PROJ_01</span>
-              <span class="strip-tag mono">Visual</span>
+
+    <section class="project-grid">
+      <div class="project-grid-inner">
+        <h2 class="mono">// Work</h2>
+        <div class="project-list">
+
+          <!-- ════════════════════════════════════════
+               PROJECT CARD TEMPLATE
+               Duplicate for each project.
+               Categories: Branding / Motion / Type / Poster / Visual / Packaging
+               ════════════════════════════════════════
+          <a href="studios/projects/project-slug/" class="project-card">
+            <div class="project-thumb">
+              <img src="../../assets/projects/project-slug.jpg" alt="" width="560" height="350" loading="lazy">
             </div>
-            <span class="strip-name">Portfolio loading</span>
-            <span class="strip-status tba">&mdash;</span>
+            <div class="project-info">
+              <span class="project-cat">Branding</span>
+              <span class="project-title">Project Name</span>
+              <p class="project-desc">One or two lines about the work.</p>
+              <span class="project-year">2026</span>
+            </div>
+          </a>
+          ──────────────────────────────────────────── -->
+
+          <!-- PLACEHOLDER CARD -->
+          <div class="project-card" style="opacity:0.2;pointer-events:none;">
+            <div class="project-thumb">
+              <div class="thumb-placeholder">[ thumb ]</div>
+            </div>
+            <div class="project-info">
+              <span class="project-cat">Branding</span>
+              <span class="project-title">First project</span>
+              <p class="project-desc">Portfolio loading.</p>
+              <span class="project-year">2026</span>
+            </div>
           </div>
+
+          <div class="project-card" style="opacity:0.2;pointer-events:none;">
+            <div class="project-thumb">
+              <div class="thumb-placeholder">[ thumb ]</div>
+            </div>
+            <div class="project-info">
+              <span class="project-cat">Motion</span>
+              <span class="project-title">Motion work</span>
+              <p class="project-desc">Portfolio loading.</p>
+              <span class="project-year">2026</span>
+            </div>
+          </div>
+
+          <div class="project-card" style="opacity:0.2;pointer-events:none;">
+            <div class="project-thumb">
+              <div class="thumb-placeholder">[ thumb ]</div>
+            </div>
+            <div class="project-info">
+              <span class="project-cat">Type</span>
+              <span class="project-title">Type work</span>
+              <p class="project-desc">Portfolio loading.</p>
+              <span class="project-year">2026</span>
+            </div>
+          </div>
+
         </div>
-        <!-- REPLACE: add project rows as work is published -->
       </div>
     </section>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span class="footer-wordmark mono">ARMGDN</span>
-        <p class="footer-slogan">The Chaos to Create.</p>
-        <nav class="footer-nav">
-          <a href="/">Home</a>
-          <a href="/labs/">Labs</a>
-          <a href="/records/">Records</a>
-        </nav>
-        <p class="footer-copy mono">ARMGDN &copy; 2026</p>
-      </div>
-    </footer>
   </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-wordmark mono">ARMGDN</span>
+      <p class="footer-slogan">The Chaos to Create.</p>
+      <nav class="footer-nav">
+        <a href="/">Home</a><a href="/labs/">Labs</a><a href="/records/">Records</a>
+      </nav>
+      <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+    </div>
+  </footer>
+  <div class="admin-login" role="dialog" aria-modal="true" aria-label="Admin login">
+    <div class="admin-login-box">
+      <h3>// ADMIN_ACCESS</h3>
+      <input type="password" class="admin-input" placeholder="password" autocomplete="current-password"/>
+      <p class="admin-err"></p>
+      <div style="display:flex;gap:0.5rem;">
+        <button id="admin-login-btn" class="btn btn-primary" style="flex:1;">Enter</button>
+        <button id="admin-cancel-btn" class="btn btn-ghost">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div class="admin-bar">
+    <span class="admin-note">// ADMIN MODE — click outlined text to edit</span>
+    <button id="admin-logout-btn" class="admin-btn danger">Exit</button>
+  </div>
   <script src="../script.js"></script>
 </body>
 </html>

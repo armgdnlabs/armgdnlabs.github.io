@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<!--
+  PROJECT PAGE TEMPLATE
+  Duplicate this folder, rename to project slug, fill all FILL markers.
+  Assets: thumbnail at ../../../assets/projects/[slug]-thumb.jpg (16:10)
+          full images at ../../../assets/projects/[slug]-01.jpg etc.
+-->
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Project Name — ARMGDN Studios</title><!-- FILL -->
+  <meta name="description" content=""/><!-- FILL -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300..600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../styles.css"/>
+  <style>
+    .project-detail{padding:clamp(2rem,5vw,5rem) 1.5rem;}
+    .project-detail-inner{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:2rem;}
+    .project-header{display:flex;flex-direction:column;gap:0.5rem;}
+    .project-header .cat{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--green);letter-spacing:0.2em;}
+    .project-header h1{font-family:var(--font-serif);font-size:var(--text-2xl);font-style:italic;color:var(--text);}
+    .project-header .byline{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--faint);letter-spacing:0.1em;}
+    .project-body{font-size:var(--text-sm);color:var(--muted);line-height:1.8;max-width:60ch;}
+    .project-images{display:flex;flex-direction:column;gap:1rem;}
+    .project-images img{width:100%;border-radius:var(--r-lg);border:1px solid var(--border);}
+    .img-placeholder{
+      width:100%;aspect-ratio:16/10;background:var(--s2);
+      border:1px dashed var(--border);border-radius:var(--r-lg);
+      display:flex;align-items:center;justify-content:center;
+      font-family:var(--font-mono);font-size:var(--text-xs);color:var(--faint);letter-spacing:0.12em;
+    }
+    .project-tags{display:flex;gap:0.5rem;flex-wrap:wrap;}
+    .tag{
+      font-family:var(--font-mono);font-size:var(--text-xs);color:var(--faint);
+      border:1px solid var(--border);padding:2px 8px;border-radius:2px;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="sr-only">Skip to content</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="wordmark">ARMGDN</a>
+      <nav class="main-nav">
+        <a href="/labs/" class="nav-link">Labs</a>
+        <a href="/records/" class="nav-link">Records</a>
+        <a href="/studios/" class="nav-link" aria-current="page">Studios</a>
+      </nav>
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode"></button>
+    </div>
+  </header>
+  <main id="main">
+    <section class="project-detail">
+      <div class="project-detail-inner">
+
+        <div class="project-header">
+          <span class="cat">Branding</span><!-- FILL: Branding / Motion / Type / Poster / Packaging / Visual -->
+          <h1>Project Name</h1><!-- FILL -->
+          <span class="byline">ARMGDN Studios &mdash; 2026</span><!-- FILL: year -->
+        </div>
+
+        <div class="project-tags">
+          <!-- FILL: add relevant tags -->
+          <span class="tag">Identity</span>
+          <span class="tag">Logo</span>
+          <span class="tag">Print</span>
+        </div>
+
+        <p class="project-body"><!-- FILL: project description -->
+          A short description of the project. What it was, who it was for, what the brief was.
+        </p>
+
+        <div class="project-images">
+          <!-- FILL: replace placeholders with actual images -->
+          <div class="img-placeholder">[ hero image ]</div>
+          <div class="img-placeholder">[ detail image ]</div>
+          <div class="img-placeholder">[ detail image ]</div>
+          <!--
+          <img src="../../../assets/projects/slug-01.jpg" alt="" width="860" height="538" loading="lazy">
+          <img src="../../../assets/projects/slug-02.jpg" alt="" width="860" height="538" loading="lazy">
+          -->
+        </div>
+
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-wordmark mono">ARMGDN</span>
+      <p class="footer-slogan">The Chaos to Create.</p>
+      <nav class="footer-nav">
+        <a href="/studios/">&larr; All work</a>
+        <a href="/">Home</a>
+      </nav>
+      <p class="footer-copy mono">ARMGDN &copy; 2026</p>
+    </div>
+  </footer>
+  <script src="../../../script.js"></script>
+</body>
+</html>

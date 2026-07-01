@@ -2,30 +2,28 @@
 
 **The Chaos to Create.**
 
-ARMGDN is a small independent universe of tools, music, and art.
-Everything here is free or pay-what-you-want.
-Built by one person, shared with anyone who finds it useful.
+Tools, music, and art. Built by one person, free to use.
 
 ---
 
-## What's here
+### [armgdnlabs.github.io](https://armgdnlabs.github.io)
 
 | | |
 |---|---|
-| [Labs](https://armgdnlabs.github.io/labs/) | Browser tools for producers — samplers, radio, theory helpers |
-| [Records](https://armgdnlabs.github.io/records/) | Music releases |
-| [Studios](https://armgdnlabs.github.io/studios/) | Art direction and visual work |
+| **Labs** | Browser tools for producers — [armgdnlabs.github.io/labs](https://armgdnlabs.github.io/labs/) |
+| **Records** | Music releases — [armgdnlabs.github.io/records](https://armgdnlabs.github.io/records/) |
+| **Studios** | Art & design work — [armgdnlabs.github.io/studios](https://armgdnlabs.github.io/studios/) |
 
 ---
 
-## Tools
+### Live tools
 
-| Tool | Status | Repo |
-|---|---|---|
-| Pocket Radio FM | Live | [armgdnlabs/pocket-radio-fm](https://github.com/armgdnlabs/pocket-radio-fm) |
-| Kit Foundry | Beta | [armgdnlabs/kit-foundry](https://github.com/armgdnlabs/kit-foundry) |
-| Chord Codes 101 | Beta | [armgdnlabs/chord-codes-101](https://github.com/armgdnlabs/chord-codes-101) |
+| Tool | Link |
+|---|---|
+| Pocket Radio FM | [pocket-radio-fm.lovable.app](https://pocket-radio-fm.lovable.app) |
+| Kit Foundry | [kit-foundry.lovable.app](https://kit-foundry.lovable.app) |
+| Chord Codes 101 | [chord-codes-101.lovable.app](https://chord-codes-101.lovable.app) |
 
 ---
 
-Visit: [armgdnlabs.github.io](https://armgdnlabs.github.io)
+Free / pay what you want.
