@@ -1,0 +1,68 @@
+---
+/** Product page shared by plugins and sounds (after atrumlab's product sections). */
+import Cover from "./Cover.astro";
+import ItemCard from "./ItemCard.astro";
+import { ITEMS, priceLabel, SHELVES, type Item } from "../data/site";
+interface Props { item: Item; back: { href: string; label: string } }
+const { item, back } = Astro.props;
+const buyLabel = item.price.kind === "paid" ? "Buy on Gumroad" : item.price.kind === "free" ? "Download" : "Name your price";
+const more = ITEMS.filter((i) => i.slug !== item.slug && (i.shelf === "plugin") === (item.shelf === "plugin")).slice(0, 3);
+const supText = item.status === "soon" ? "soon" : item.price.kind === "paid" ? "new" : "free";
+---
+<section class="ip wrap">
+  <a class="ip__back" href={back.href}>← {back.label}</a>
+  <div class="ip__head">
+    <p class="kick" data-reveal>{item.status === "soon" ? "In the lab" : SHELVES[item.shelf].title}</p>
+    <h1 class="display lines"><span><span>{item.name}.<sup>({supText})</sup></span></span></h1>
+    <p class="lede" data-reveal>{item.blurb}</p>
+  </div>
+  <div class="ip__grid">
+    <div class="ip__art" data-reveal data-tilt><Cover item={item} /></div>
+    <div class="ip__buy glass" data-reveal>
+      <div class="ip__price"><span>{priceLabel(item.price)}</span><span class="ip__kind">{item.kind}</span></div>
+      <ul class="ip__list">
+        <li><span>+</span>{item.spec}</li>
+        {(item.features ?? []).map((f) => <li><span>+</span>{f}</li>)}
+      </ul>
+      {item.status === "out" && item.url ? (
+        <a class="btn red" href={item.url} rel="noopener" data-magnet><span class="roll"><span>{buyLabel}</span><span>{buyLabel}</span></span><span class="pip"></span></a>
+      ) : (
+        <span class="btn ghost ip__off">Not out yet. Join the list below.</span>
+      )}
+    </div>
+  </div>
+  {item.contents && (
+    <div class="ip__inside" data-reveal>
+      <p class="tag">Inside</p>
+      <p class="ip__root">! {item.slug} _ armgdn /</p>
+      {item.contents.map((c) => <div class="ip__row"><span>{c.folder} /</span><span>{c.count ?? "—"}</span><span>{c.note ?? "TBA"}</span></div>)}
+    </div>
+  )}
+  {more.length > 0 && (
+    <div class="ip__more">
+      <p class="tag">More</p>
+      <div class="ip__cards">{more.map((m) => <ItemCard item={m} />)}</div>
+    </div>
+  )}
+</section>
+<style>
+  .ip { padding-top: 120px; }
+  .ip__back { font: 500 13px/1 var(--grot); color: var(--fg-2); }
+  .ip__head { margin: 40px 0 48px; display: flex; flex-direction: column; gap: 22px; }
+  .ip__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px; align-items: stretch; }
+  .ip__art { transition: transform 0.25s var(--ease); }
+  .ip__art :global(.cover) { border-radius: var(--r); height: 100%; aspect-ratio: auto; min-height: 380px; }
+  .ip__buy { display: flex; flex-direction: column; gap: 22px; padding: 28px; }
+  .ip__price { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font: 600 clamp(30px, 4vw, 52px)/1 var(--grot); letter-spacing: -0.04em; }
+  .ip__kind { font: 500 13px/1 var(--grot); color: var(--fg-2); letter-spacing: 0; white-space: nowrap; }
+  .ip__list { list-style: none; margin: 0; padding: 0; flex: 1; }
+  .ip__list li { display: flex; gap: 12px; padding: 13px 0; border-top: 1px solid var(--line); font: 500 15px/1.3 var(--grot); }
+  .ip__list li span { color: var(--signal); }
+  .ip__off { align-self: stretch; justify-content: center; color: var(--fg-2); }
+  .ip__inside { margin-top: 64px; font: 14px/1.4 var(--mono); }
+  .ip__root { color: var(--muted); }
+  .ip__row { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .ip__more { margin-top: 90px; }
+  .ip__cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin-top: 18px; }
+  @media (max-width: 820px) { .ip__grid { grid-template-columns: 1fr; } }
+</style>

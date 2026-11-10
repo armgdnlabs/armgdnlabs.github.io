@@ -1,0 +1,29 @@
+---
+import { NEWSLETTER_ACTION } from "../data/site";
+interface Props { title?: string; line?: string }
+const { title = "Join the lab.", line = "Free sounds, early plugin builds and new drops, straight to your inbox. No spam." } = Astro.props;
+---
+<section class="su wrap">
+  <div class="su__card card" data-reveal>
+    <p class="kick">Mailing list</p>
+    <h2 class="su__title lines"><span><span>{title}</span></span></h2>
+    <p class="lede">{line}</p>
+    <form class="su__form" data-signup action={NEWSLETTER_ACTION || undefined} method="post" target="_blank">
+      <label class="sr" for="su-email">Email</label>
+      <input id="su-email" name="email" type="email" required placeholder="your@email.com" autocomplete="email" />
+      <button class="su__go" type="submit" aria-label="Sign up" data-magnet>→</button>
+    </form>
+    <p class="su__msg" data-msg aria-live="polite">Free drops go to the list first.</p>
+  </div>
+</section>
+<style>
+  .su { margin-top: 120px; }
+  .su__card { padding: clamp(28px, 5vw, 64px); }
+  .su__title { margin: 18px 0 16px; font: 600 clamp(56px, 10vw, 150px)/0.86 var(--grot); letter-spacing: -0.06em; }
+  .su__form { display: flex; align-items: center; gap: 14px; margin-top: 42px; border-bottom: 1px solid var(--line-2); }
+  .su__form input { flex: 1; min-width: 0; padding: 14px 0; background: none; border: 0; outline: 0; font: 400 clamp(26px, 4vw, 56px)/1.1 var(--grot); letter-spacing: -0.03em; }
+  .su__form input::placeholder { color: var(--muted); opacity: 0.5; }
+  .su__go { display: grid; place-items: center; width: 56px; height: 56px; flex: none; border-radius: 50%; background: var(--fg); color: var(--bg); font-size: 22px; transition: background 0.3s; }
+  .su__go:hover { background: var(--signal); color: var(--bone); }
+  .su__msg { margin: 14px 0 0; font: 12px/1.4 var(--mono); color: var(--muted); }
+</style>

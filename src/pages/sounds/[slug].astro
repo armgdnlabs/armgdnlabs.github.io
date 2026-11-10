@@ -1,0 +1,12 @@
+---
+import Base from "../../layouts/Base.astro";
+import ItemPage from "../../components/ItemPage.astro";
+import Signup from "../../components/Signup.astro";
+import { ITEMS, type Item } from "../../data/site";
+export function getStaticPaths() { return ITEMS.filter((i) => i.shelf !== "plugin").map((item) => ({ params: { slug: item.slug }, props: { item } })); }
+const { item } = Astro.props as { item: Item };
+---
+<Base title={item.name} section="sounds" description={`${item.name}, ${item.kind.toLowerCase()} by ARMGDN. ${item.blurb}`}>
+  <ItemPage item={item} back={{ href: `/sounds/#${item.shelf}`, label: "Sounds" }} />
+  <Signup title={item.shelf === "free" ? "Get the drop." : "Launch day."} line={item.shelf === "free" ? "Free drops go out by email. Sign up to get this one." : "Sign up and you will hear when it is out."} />
+</Base>

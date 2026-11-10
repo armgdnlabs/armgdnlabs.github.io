@@ -1,73 +1,12 @@
 ---
 import Base from "../../layouts/Base.astro";
-import LabsChrome from "../../components/LabsChrome.astro";
-import { PRODUCTS, priceLabel, type Product } from "../../data/site";
-export function getStaticPaths() { return PRODUCTS.map((p) => ({ params: { slug: p.slug }, props: { p } })); }
-const { p } = Astro.props as { p: Product };
-const others = PRODUCTS.filter((x) => x.slug !== p.slug);
+import ItemPage from "../../components/ItemPage.astro";
+import Signup from "../../components/Signup.astro";
+import { ITEMS, type Item } from "../../data/site";
+export function getStaticPaths() { return ITEMS.filter((i) => i.shelf === "plugin").map((item) => ({ params: { slug: item.slug }, props: { item } })); }
+const { item } = Astro.props as { item: Item };
 ---
-<Base title={`${p.name} — Labs`} zone="labs" description={`${p.name} by yondr. ${p.blurb}`}>
-  <LabsChrome path={`/${p.slug}`} />
-  <section class="prod wrap">
-    <a class="back" href="/labs/">← SHELF</a>
-    <div class="prod__grid">
-      <div class="win" data-reveal>
-        <div class="win__bar"><span>{p.type.toUpperCase()}</span><span>{p.status === "soon" ? "IN THE LAB" : "OUT NOW"}</span></div>
-        <div class="win__body">
-          <h1 class="win__name">{p.name}</h1>
-          <p class="win__spec">{p.spec}{p.bpm ? ` · ${p.bpm} bpm` : ""}{p.key ? ` · ${p.key}` : ""}</p>
-          <p class="win__blurb">{p.blurb}</p>
-          <div class="buy">
-            <span class="buy__price">{priceLabel(p.price)}</span>
-            {p.status === "out" && p.url ? (
-              <a class="pbtn pbtn--wide" href={p.url} rel="noopener">{p.price.kind === "paid" ? "BUY ON GUMROAD" : "DOWNLOAD"}</a>
-            ) : (
-              <span class="pbtn pbtn--wide pbtn--off">NOT OUT YET</span>
-            )}
-          </div>
-        </div>
-      </div>
-      <div class="inside" data-reveal>
-        <p class="pixel-h">INSIDE</p>
-        <p class="inside__root">! {p.slug} _ yondr /</p>
-        {(p.contents ?? [{ folder: "contents_", count: 0, note: "TBA" }]).map((c) => (
-          <div class="inside__row"><span>{c.folder} /</span><span>{c.count || "—"}</span><span>{c.note ?? ""}</span></div>
-        ))}
-      </div>
-    </div>
-    {others.length > 0 && (
-      <div class="more">
-        <p class="pixel-h">ALSO ON THE SHELF</p>
-        <div class="more__list">{others.map((o) => <a href={`/labs/${o.slug}/`} class="pick">{o.name}<small>{o.type} · {o.status === "soon" ? "soon" : priceLabel(o.price)}</small></a>)}</div>
-      </div>
-    )}
-  </section>
+<Base title={item.name} section="labs" description={`${item.name}, ${item.kind.toLowerCase()} by ARMGDN. ${item.blurb}`}>
+  <ItemPage item={item} back={{ href: "/labs/#plugins", label: "Labs" }} />
+  <Signup title="Get it first." line="Beta builds and launch day go to the list first." />
 </Base>
-
-<style>
-  .prod { padding-top: 36px; }
-  .back { font: 700 12px/1 var(--pixel); }
-  .prod__grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 18px; margin-top: 18px; align-items: start; }
-  .win { background: #fffdf9; box-shadow: 0 0 0 2px var(--void), 8px 8px 0 var(--void); }
-  .win__bar { display: flex; justify-content: space-between; padding: 8px 12px; background: var(--void); color: var(--bone); font: 16px/1 var(--screen); }
-  .win__body { padding: 22px; }
-  .win__name { margin: 0; font: 700 clamp(36px, 6vw, 72px)/0.95 var(--pixel); text-transform: lowercase; }
-  .win__spec { margin: 10px 0 0; font: 20px/1 var(--screen); color: var(--fg-2); }
-  .win__blurb { margin: 22px 0; font: 14px/1.6 var(--mono); }
-  .buy { display: flex; align-items: center; gap: 14px; padding-top: 16px; border-top: 2px solid var(--void); }
-  .buy__price { font: 700 22px/1 var(--pixel); }
-  .pbtn { display: grid; place-items: center; height: 44px; padding: 0 16px; box-shadow: inset 0 0 0 2px var(--void); font: 700 13px/1 var(--pixel); }
-  .pbtn--wide { flex: 1; }
-  .pbtn:hover { background: var(--void); color: var(--bone); }
-  .pbtn--off { opacity: 0.45; pointer-events: none; }
-  .inside { padding: 18px; background: var(--void); color: var(--bone); font: 18px/1.4 var(--screen); }
-  .pixel-h { margin: 0; font: 700 18px/1 var(--pixel); text-transform: uppercase; }
-  .inside__root { margin: 14px 0 8px; opacity: 0.7; }
-  .inside__row { display: grid; grid-template-columns: 1fr 60px 1fr; gap: 8px; padding: 8px 0; border-top: 1px dashed #f7f2ec44; }
-  .more { margin-top: 56px; }
-  .more__list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .pick { display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; box-shadow: inset 0 0 0 2px var(--void); font: 700 13px/1 var(--pixel); text-transform: uppercase; }
-  .pick small { font: 15px/1 var(--screen); text-transform: none; opacity: 0.7; }
-  .pick:hover { background: var(--void); color: var(--bone); }
-  @media (max-width: 820px) { .prod__grid { grid-template-columns: 1fr; } }
-</style>

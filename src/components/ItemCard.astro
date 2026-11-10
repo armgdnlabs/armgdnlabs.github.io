@@ -1,0 +1,26 @@
+---
+import Cover from "./Cover.astro";
+import { itemHref, priceLabel, type Item } from "../data/site";
+interface Props { item: Item; n?: number }
+const { item, n } = Astro.props;
+---
+<a class="ic card" href={itemHref(item)} data-tilt data-cursor="View" data-reveal>
+  <div class="ic__top"><span class="ic__n">{n != null ? `(${String(n).padStart(2, "0")})` : ""} {item.kind}</span>{item.status === "soon" && <span class="ic__soon">In the lab</span>}</div>
+  <Cover item={item} label={false} />
+  <div class="ic__foot">
+    <span class="ic__name">{item.name}</span>
+    <span class="ic__price">{item.status === "soon" ? "Soon" : priceLabel(item.price)}</span>
+  </div>
+  <span class="ic__spec">{item.spec}</span>
+</a>
+<style>
+  .ic { display: flex; flex-direction: column; gap: 12px; padding: 12px 12px 16px; transition: transform 0.25s var(--ease); }
+  .ic__top { display: flex; justify-content: space-between; align-items: center; padding: 2px 4px; font: 500 12px/1 var(--grot); color: var(--fg-2); }
+  .ic__soon { padding: 5px 9px; border-radius: 999px; background: var(--glass-2); font: 600 11px/1 var(--grot); color: var(--fg); }
+  .ic :global(.cover) { transition: transform 0.8s var(--spring), filter 0.6s; filter: grayscale(0.6) contrast(1.1); }
+  .ic:hover :global(.cover) { transform: scale(1.03); filter: none; }
+  .ic__foot { display: flex; justify-content: space-between; align-items: baseline; padding: 0 4px; }
+  .ic__name { font: 600 26px/1 var(--grot); letter-spacing: -0.04em; }
+  .ic__price { font: 600 15px/1 var(--grot); }
+  .ic__spec { padding: 0 4px; font: 12px/1.4 var(--mono); color: var(--muted); }
+</style>

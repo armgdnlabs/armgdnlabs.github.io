@@ -1,60 +1,100 @@
 ---
 import "../styles/base.css";
+import { ClientRouter } from "astro:transitions";
 import Mark from "../components/Mark.astro";
-import { PRODUCTS, RELEASES, TOOLS } from "../data/site";
+import { FOLLOW, YONDR } from "../data/site";
+import { SYMBOL } from "../data/marks";
 
-interface Props { title: string; description?: string; zone: "home" | "labs" | "studio" | "records" | "about" }
-const { title, description = "ARMGDN — Labs, Studio, Records. Plugins, kits and samples by yondr; free creative tools; releases.", zone } = Astro.props;
+interface Props { title: string; description?: string; section?: "home" | "labs" | "sounds" | "about" }
+const { title, description = "ARMGDN — experimental plugins, sounds and creative tools. The Chaos to Create.", section = "home" } = Astro.props;
 const nav = [
-  { href: "/labs/", label: "Labs", n: PRODUCTS.length, z: "labs" },
-  { href: "/studio/", label: "Studio", n: TOOLS.length, z: "studio" },
-  { href: "/records/", label: "Records", n: RELEASES.length, z: "records" },
+  { href: "/labs/", label: "Labs", s: "labs" },
+  { href: "/sounds/", label: "Sounds", s: "sounds" },
+  { href: "/about/", label: "About", s: "about" },
 ];
-const pageTitle = zone === "home" ? title : `${title} — ARMGDN`;
+const pageTitle = section === "home" ? title : `${title} — ARMGDN`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const org = { "@context": "https://schema.org", "@type": "Organization", name: "ARMGDN", url: Astro.site?.href, logo: new URL("/favicon.svg", Astro.site).href, sameAs: FOLLOW.map((f) => f.url) };
 ---
 <!doctype html>
-<html lang="en" data-zone={zone}>
+<html lang="en" data-section={section}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ARMGDN" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="theme-color" content="#080808" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=JetBrains+Mono:wght@400;500;700&family=Silkscreen:wght@400;700&family=Tinos&family=VT323&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;500;700&family=Silkscreen:wght@400;700&family=Tinos:ital@0;1&display=swap" rel="stylesheet" />
+    <script type="application/ld+json" set:html={JSON.stringify(org)} />
+    <!-- Theme before paint: saved choice, else dark. -->
+    <script is:inline>
+      try { const t = localStorage.getItem("armgdn-theme"); if (t === "light") document.documentElement.dataset.theme = "light"; } catch {}
+      // The loader plays once per visit; later page loads skip it before first paint.
+      try { if (sessionStorage.getItem("armgdn-loaded") === "1" || matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("loaded", "instant"); } catch {}
+      document.addEventListener("astro:before-swap", (e) => { const d = document.documentElement, n = e.newDocument.documentElement; if (d.dataset.theme) n.dataset.theme = d.dataset.theme; n.classList.add("loaded", "instant"); });
+    </script>
+    <ClientRouter />
   </head>
   <body>
     <a class="sr" href="#main">Skip to content</a>
-    <header class="hdr">
-      <a class="hdr__home" href="/" aria-label="ARMGDN home">
+
+    <div class="loader" id="loader" transition:persist aria-hidden="true">
+      <div class="loader__in">
+        <svg class="loader__sym" viewBox="0 0 106 128"><path d={SYMBOL} /></svg>
+        <div class="loader__row"><span class="loader__word">ARMGDN</span><span class="loader__n" id="loader-n">000</span></div>
+        <div class="loader__bar"><span id="loader-bar"></span></div>
+      </div>
+    </div>
+
+    <canvas class="bg" id="bg" transition:persist aria-hidden="true"></canvas>
+    <div class="cursor" id="cursor" transition:persist aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span class="cursor__label"></span></span></div>
+    <div class="progress" id="progress" transition:persist aria-hidden="true"></div>
+
+    <header class="hdr" transition:persist>
+      <a class="hdr__home" href="/" aria-label="ARMGDN home" data-magnet>
         <Mark class="hdr__sym" />
         <span class="hdr__word">ARMGDN</span>
       </a>
-      <nav class="hdr__nav" aria-label="Sections">
-        {nav.map((n) => (
-          <a href={n.href} aria-current={zone === n.z ? "page" : undefined}>
-            <span class="roll"><span>{n.label}</span><span>{n.label}</span></span><sup>{String(n.n).padStart(2, "0")}</sup>
-          </a>
-        ))}
+      <nav class="hdr__nav" aria-label="Main">
+        {nav.map((n) => <a href={n.href} data-nav={n.s}><span class="roll"><span>{n.label}</span><span>{n.label}</span></span></a>)}
       </nav>
-      <a class="hdr__about" href="/about/"><span class="roll"><span>About</span><span>About</span></span></a>
+      <div class="hdr__right">
+        <button class="theme" id="theme" aria-label="Switch light or dark" data-cursor="Theme">
+          <span class="theme__track"><span class="theme__knob"></span></span>
+        </button>
+        <a class="hdr__monitor btn ghost" href="/labs/monitor/" data-astro-reload data-magnet><span class="dot-live"></span><span class="roll"><span>Monitor</span><span>Monitor</span></span></a>
+      </div>
     </header>
-    <main id="main"><slot /></main>
+
+    <main id="main" transition:animate="fade"><slot /></main>
+
     <footer class="ftr">
       <div class="wrap">
         <div class="ftr__top">
-          <p class="ftr__motto">The Chaos to Create.</p>
+          <p class="ftr__motto">The Chaos<br />to Create.</p>
           <div class="ftr__cols">
-            <div><p class="tag">Sections</p>{nav.map((n) => <a href={n.href}>{n.label}</a>)}<a href="/about/">About</a></div>
-            <div><p class="tag">Tools</p><a href="/monitor/">Monitor</a><a href="https://github.com/armgdnlabs">GitHub</a></div>
-            <div><p class="tag">Sound</p><a href="/labs/">yondr kits</a><a href="/records/">Releases</a></div>
+            <div><p class="tag">ARMGDN</p><a href="/labs/">Labs</a><a href="/sounds/">Sounds</a><a href="/labs/monitor/" data-astro-reload>Monitor</a><a href="/about/">About</a></div>
+            <div>
+              <p class="tag">Follow</p>
+              {FOLLOW.map((f) => <a href={f.url} rel="noopener">{f.label} ↗</a>)}
+              <span class="ftr__sep"></span>
+              {YONDR.url ? <a href={YONDR.url} rel="noopener">{YONDR.label} ↗</a> : <span class="ftr__plain">{YONDR.label}</span>}
+            </div>
           </div>
         </div>
         <Mark kind="wordmark" class="ftr__word" />
-        <div class="ftr__base"><span>© {new Date().getFullYear()} ARMGDN</span><span>Free tools · pay-what-you-want sounds</span><span>Built in-house</span></div>
+        <div class="ftr__base"><span>© {new Date().getFullYear()} ARMGDN</span><span>Built in-house</span></div>
       </div>
     </footer>
     <script>import "../scripts/site.ts";</script>
@@ -62,30 +102,67 @@ const pageTitle = zone === "home" ? title : `${title} — ARMGDN`;
 </html>
 
 <style>
-  .hdr { position: sticky; top: 0; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 60px; padding: 0 var(--gutter); background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
-  .hdr__home { display: inline-flex; align-items: center; gap: 10px; }
-  .hdr :global(.hdr__sym) { height: 26px; transition: transform 0.5s var(--spring); }
-  .hdr__home:hover :global(.hdr__sym) { transform: rotate(-8deg) scale(0.92); }
-  .hdr__word { font: 400 13px/1 var(--serif); letter-spacing: 0.42em; }
-  .hdr__nav { display: flex; gap: clamp(18px, 4vw, 56px); font: 500 14px/1 var(--grot); }
-  .hdr__nav a { display: inline-flex; align-items: flex-start; gap: 3px; color: var(--fg-2); transition: color 0.2s; }
-  .hdr__nav a:hover, .hdr__nav a[aria-current] { color: var(--fg); }
-  .hdr__nav a[aria-current]::after { content: ""; width: 5px; height: 5px; margin: 4px 0 0 4px; border-radius: 50%; background: var(--signal); }
-  .hdr__nav sup { font: 500 9px/1 var(--mono); color: var(--muted); }
-  .hdr__about { justify-self: end; font: 500 13px/1 var(--grot); color: var(--fg-2); }
-  @media (max-width: 640px) {
-    .hdr { grid-template-columns: auto 1fr; }
-    .hdr__word, .hdr__about { display: none; }
-    .hdr__nav { justify-content: flex-end; gap: 18px; }
+  .hdr { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 68px; padding: 0 var(--gutter); background: linear-gradient(var(--bg) 20%, transparent); }
+  .hdr { transition: transform 0.6s var(--expo); }
+  .hdr:global(.hdr--away) { transform: translateY(-100%); }
+  .hdr__home { display: inline-flex; align-items: center; gap: 12px; justify-self: start; }
+  .hdr :global(.hdr__sym) { height: 28px; transition: transform 0.6s var(--spring); }
+  .hdr__home:hover :global(.hdr__sym) { transform: rotate(-10deg) scale(0.9); }
+  .hdr__word { font: 400 13px/1 var(--serif); letter-spacing: 0.44em; }
+  .hdr__nav { display: flex; gap: 6px; padding: 5px; border-radius: 999px; background: var(--glass); box-shadow: inset 0 0 0 1px var(--line); backdrop-filter: blur(18px); }
+  .hdr__nav a { padding: 9px 16px; border-radius: 999px; font: 600 13px/1 var(--grot); color: var(--fg-2); transition: color 0.3s, background 0.3s; }
+  .hdr__nav a:hover { color: var(--fg); }
+  .hdr__nav a.on { background: var(--fg); color: var(--bg); }
+  .hdr__right { display: flex; align-items: center; gap: 12px; justify-self: end; }
+  .hdr__monitor { height: 38px; padding: 0 16px; gap: 9px; }
+  .theme { display: grid; place-items: center; width: 50px; height: 30px; }
+  .theme__track { position: relative; width: 44px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line-2); background: var(--glass); }
+  .theme__knob { position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--fg); transition: transform 0.5s var(--spring); box-shadow: inset -5px -3px 0 0 var(--bg); }
+  :global([data-theme="light"]) .theme__knob { transform: translateX(20px); box-shadow: 0 0 0 3px var(--signal) inset; background: var(--bone); }
+  @media (max-width: 720px) {
+    .hdr { grid-template-columns: auto 1fr auto; gap: 10px; }
+    .hdr__word, .hdr__monitor { display: none; }
+    .hdr__nav { justify-self: center; }
+    .hdr__nav a { padding: 8px 11px; }
   }
-  .ftr { margin-top: 120px; padding: 64px 0 28px; border-top: 1px solid var(--line); }
+
+  .loader { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; background: #080808; color: #f7f2ec; clip-path: inset(0 0 0 0); transition: clip-path 1s var(--expo); }
+  :global(html.loaded) .loader { clip-path: inset(0 0 100% 0); pointer-events: none; }
+  :global(html.instant) .loader { display: none; }
+  .loader__in { width: min(320px, 70vw); }
+  .loader__sym { width: 64px; fill: transparent; stroke: #f7f2ec; stroke-width: 1; stroke-dasharray: 900; stroke-dashoffset: 900; animation: draw 1.4s var(--ease) forwards, fill 0.4s 1.1s forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  @keyframes fill { to { fill: #f7f2ec; } }
+  .loader__row { display: flex; justify-content: space-between; margin: 28px 0 10px; font: 400 12px/1 var(--serif); letter-spacing: 0.44em; }
+  .loader__n { font: 500 12px/1 var(--mono); letter-spacing: 0.1em; }
+  .loader__bar { height: 1px; background: #f7f2ec26; }
+  .loader__bar span { display: block; height: 100%; width: 0; background: var(--signal); }
+
+  .bg { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+  .progress { position: fixed; top: 0; left: 0; z-index: 70; height: 2px; width: 100%; background: var(--signal); transform-origin: 0 50%; transform: scaleX(0); }
+
+  .cursor { position: fixed; inset: 0; z-index: 150; pointer-events: none; }
+  .cursor__dot, .cursor__ring { position: fixed; top: 0; left: 0; border-radius: 50%; will-change: transform; }
+  .cursor__dot { width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--signal); }
+  .cursor__ring { display: grid; place-items: center; width: 38px; height: 38px; margin: -19px 0 0 -19px; box-shadow: inset 0 0 0 1px var(--fg); opacity: 0.5; transition: width 0.4s var(--spring), height 0.4s var(--spring), margin 0.4s var(--spring), background 0.3s, opacity 0.3s; }
+  .cursor__label { font: 600 11px/1 var(--grot); color: var(--bg); opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
+  :global(.cursor.is-link) .cursor__ring { width: 56px; height: 56px; margin: -28px 0 0 -28px; opacity: 0.9; }
+  :global(.cursor.is-label) .cursor__ring { width: 86px; height: 86px; margin: -43px 0 0 -43px; background: var(--fg); opacity: 1; }
+  :global(.cursor.is-label) .cursor__label { opacity: 1; }
+  :global(.cursor.is-hidden) { opacity: 0; }
+  @media (pointer: coarse) { .cursor { display: none; } }
+
+  main { display: block; min-height: 70vh; }
+  .ftr { position: relative; margin-top: 140px; padding: 72px 0 28px; border-top: 1px solid var(--line); }
   .ftr__top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; }
-  .ftr__motto { margin: 0; font: italic 400 clamp(28px, 4vw, 48px)/1.05 var(--serif); }
-  .ftr__cols { display: flex; gap: clamp(28px, 6vw, 80px); }
-  .ftr__cols div { display: flex; flex-direction: column; gap: 8px; font: 500 14px/1.4 var(--grot); }
-  .ftr__cols .tag { margin: 0 0 6px; }
-  .ftr__cols a { color: var(--fg-2); }
+  .ftr__motto { margin: 0; font: italic 400 clamp(36px, 5vw, 64px)/0.98 var(--serif); }
+  .ftr__cols { display: flex; gap: clamp(40px, 8vw, 110px); }
+  .ftr__cols div { display: flex; flex-direction: column; gap: 9px; font: 500 15px/1.3 var(--grot); }
+  .ftr__cols .tag { margin: 0 0 8px; }
+  .ftr__cols a { color: var(--fg-2); transition: color 0.2s; }
   .ftr__cols a:hover { color: var(--fg); }
-  .ftr :global(.ftr__word) { width: 100%; height: auto; margin: 72px 0 24px; opacity: 0.92; }
-  .ftr__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font: 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .ftr__sep { height: 1px; width: 24px; margin: 6px 0; background: var(--line-2); }
+  .ftr__plain { color: var(--muted); }
+  .ftr :global(.ftr__word) { width: 100%; height: auto; margin: 88px 0 24px; }
+  .ftr__base { display: flex; justify-content: space-between; font: 11px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 </style>

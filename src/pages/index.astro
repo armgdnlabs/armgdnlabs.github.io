@@ -1,126 +1,95 @@
 ---
 import Base from "../layouts/Base.astro";
 import Mark from "../components/Mark.astro";
-import { PRODUCTS, RELEASES, TOOLS } from "../data/site";
-const live = TOOLS.find((t) => t.status === "live")!;
-const words = ["labs", "studio", "records", "yondr", "plugins", "kits", "samples", "free tools"];
+import Ticker from "../components/Ticker.astro";
+import Signup from "../components/Signup.astro";
+import { TOOLS } from "../data/site";
+const monitor = TOOLS[0];
+const rows = [
+  { href: "/labs/", name: "Labs", sup: "experimental", line: "Plugins, web apps and tools. Monitor is live.", cursor: "Enter Labs" },
+  { href: "/sounds/", name: "Sounds", sup: "kits · samples", line: "Drum kits, sample packs, bundles and free drops.", cursor: "Hear more" },
+];
 ---
-<Base title="ARMGDN — Labs, Studio, Records" zone="home">
-  <section class="hero wrap">
-    <p class="tag" data-reveal>ARMGDN // independent sound and image</p>
-    <h1 class="sr">ARMGDN</h1>
-    <div class="hero__mark" data-reveal><Mark kind="wordmark" class="hero__word" /></div>
-    <div class="hero__row" data-reveal>
-      <p class="hero__motto">The Chaos<br />to Create.</p>
-      <p class="hero__lede">Plugins, kits and samples by <b>yondr</b>. Free tools for images and video. Records from a small, deliberate label. Three doors, one house.</p>
+<Base title="ARMGDN — Experimental plugins, sounds and tools" section="home">
+  <section class="hero">
+    <canvas data-field class="hero__field"></canvas>
+    <div class="hero__fade"></div>
+    <div class="hero__in wrap">
+      <p class="kick" data-reveal>Plugins · sounds · tools</p>
+      <h1 class="sr">ARMGDN</h1>
+      <div class="hero__mark lines"><span><span><Mark kind="wordmark" class="hero__word" /></span></span></div>
+      <div class="hero__row">
+        <p class="hero__motto lines"><span><span>The Chaos</span></span><span><span>to Create.</span></span></p>
+        <div class="hero__side" data-reveal>
+          <p class="lede">Experimental plugins and creative tools, plus the drums and samples made alongside them. Built in-house.</p>
+          <div class="hero__btns">
+            <a class="btn" href="/labs/" data-magnet><span class="roll"><span>Enter Labs</span><span>Enter Labs</span></span><span class="pip"></span></a>
+            <a class="btn ghost" href="/sounds/" data-magnet><span class="roll"><span>Sounds</span><span>Sounds</span></span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <span class="hero__scroll" aria-hidden="true"><i></i></span>
+  </section>
+
+  <Ticker items={["Labs", "Plugins", "Monitor is live", "Sounds", "Drum kits", "Sample packs", "Free drops", "The Chaos to Create"]} />
+
+  <section class="rows wrap" aria-label="ARMGDN">
+    {rows.map((r) => (
+      <a class="row" href={r.href} data-cursor={r.cursor}>
+        <span class="row__name lines"><span><span>{r.name}.<sup>({r.sup})</sup></span></span></span>
+        <span class="row__line" data-reveal>{r.line}</span>
+        <span class="row__go" aria-hidden="true">↗</span>
+      </a>
+    ))}
+  </section>
+
+  <section class="mon wrap">
+    <div class="mon__card card" data-tilt data-reveal>
+      <div class="mon__text">
+        <p class="kick">Live in Labs</p>
+        <h2 class="h2">{monitor.name}.<sup>(free)</sup></h2>
+        <p class="lede">{monitor.line}</p>
+        <a class="btn red" href={monitor.url} data-astro-reload data-magnet><span class="roll"><span>Open Monitor</span><span>Open Monitor</span></span><span class="pip"></span></a>
+      </div>
+      <ul class="mon__list">{monitor.features.map((f) => <li><span>+</span>{f}</li>)}</ul>
     </div>
   </section>
 
-  <section class="doors wrap" aria-label="Sections">
-    <a class="door door--labs" href="/labs/" data-reveal>
-      <div class="door__chrome"><i></i><i></i><i></i><span>armgdn/labs</span></div>
-      <p class="door__pixel">SOUND<br />SUPPLY</p>
-      <div class="door__bars" aria-hidden="true">{Array.from({ length: 28 }, (_, i) => <span style={`--h:${20 + ((i * 37) % 70)}%`}></span>)}</div>
-      <div class="door__foot"><span class="door__name">Labs</span><span class="door__n">{String(PRODUCTS.length).padStart(2, "0")} items</span></div>
-      <p class="door__line">yondr plugins, kits, samples</p>
-    </a>
-    <a class="door door--studio" href="/studio/" data-reveal>
-      <p class="door__big">Studio.<sup>(tools)</sup></p>
-      <div class="door__glass"><span class="dot-live"></span> {live.name} is live</div>
-      <div class="door__foot"><span class="door__name">Studio</span><span class="door__n">{String(TOOLS.length).padStart(2, "0")} tools</span></div>
-      <p class="door__line">Free creative tools in the browser</p>
-    </a>
-    <a class="door door--records" href="/records/" data-reveal>
-      <p class="door__cond">REC<br />ORDS</p>
-      <div class="door__sleeve" aria-hidden="true"><span>AGDN<br />001</span></div>
-      <div class="door__foot"><span class="door__name">Records</span><span class="door__n">{String(RELEASES.length).padStart(2, "0")} release</span></div>
-      <p class="door__line">Releases, roster, future artists</p>
-    </a>
-  </section>
-
-  <section class="marquee" aria-hidden="true">
-    <div class="marquee__track">
-      {[0, 1].map(() => <div class="marquee__item">{words.map((w) => <><span>{w}</span><i>⊕</i></>)}</div>)}
-    </div>
-  </section>
-
-  <section class="now wrap ticks">
-    <p class="tag" data-reveal>Now</p>
-    <div class="now__grid">
-      <a href={live.url} class="now__card" data-reveal data-tilt>
-        <span class="now__kind">Studio · live</span>
-        <span class="now__title">{live.name}</span>
-        <span class="now__line">{live.line}</span>
-        <span class="btn ghost"><span class="roll"><span>Open {live.name}</span><span>Open {live.name}</span></span><span class="pip"></span></span>
-      </a>
-      <a href="/labs/" class="now__card" data-reveal data-tilt>
-        <span class="now__kind">Labs · in the lab</span>
-        <span class="now__title">First yondr kits</span>
-        <span class="now__line">Drum kits, samples and a plugin are being finished. Free or pay what you want; larger packs on Gumroad.</span>
-        <span class="btn ghost"><span class="roll"><span>See Labs</span><span>See Labs</span></span><span class="pip"></span></span>
-      </a>
-      <a href="/records/" class="now__card" data-reveal data-tilt>
-        <span class="now__kind">Records · soon</span>
-        <span class="now__title">{RELEASES[0].catalog}</span>
-        <span class="now__line">{RELEASES[0].artist} — {RELEASES[0].title}. The first ARMGDN release.</span>
-        <span class="btn ghost"><span class="roll"><span>See Records</span><span>See Records</span></span><span class="pip"></span></span>
-      </a>
-    </div>
-  </section>
+  <Signup />
 </Base>
 
 <style>
-  .hero { padding: clamp(40px, 8vw, 96px) 0 56px; }
-  .hero__mark { margin: 28px 0 40px; }
+  .hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 120px 0 64px; overflow: hidden; }
+  .hero__field { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.55; }
+  .hero__fade { position: absolute; inset: 0; background: linear-gradient(var(--bg) 0%, transparent 30%, transparent 55%, var(--bg) 100%); }
+  .hero__in { position: relative; }
+  .hero__mark { margin: 26px 0 34px; }
   .hero :global(.hero__word) { width: 100%; height: auto; }
-  .hero__row { display: grid; grid-template-columns: 1fr minmax(0, 520px); gap: 40px; align-items: end; }
-  .hero__motto { margin: 0; font: italic 400 clamp(34px, 5vw, 72px)/0.98 var(--serif); }
-  .hero__lede { margin: 0; color: var(--fg-2); font: 400 15px/1.6 var(--mono); }
-  .hero__lede b { color: var(--fg); font-weight: 500; }
-  @media (max-width: 760px) { .hero__row { grid-template-columns: 1fr; } }
+  .hero__row { display: grid; grid-template-columns: 1fr minmax(0, 440px); gap: 40px; align-items: end; }
+  .hero__motto { margin: 0; font: italic 400 clamp(40px, 6vw, 92px)/0.95 var(--serif); }
+  .hero__btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .hero__scroll { position: absolute; left: 50%; bottom: 22px; width: 22px; height: 34px; margin-left: -11px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--line-2); }
+  .hero__scroll i { position: absolute; left: 50%; top: 7px; width: 2px; height: 7px; margin-left: -1px; background: var(--fg); border-radius: 2px; animation: wheel 1.8s var(--ease) infinite; }
+  @keyframes wheel { 0% { transform: translateY(0); opacity: 1; } 80%, 100% { transform: translateY(12px); opacity: 0; } }
+  @media (max-width: 760px) { .hero__row { grid-template-columns: 1fr; } .hero__scroll { display: none; } }
 
-  /* Three doors: each a small preview of its section; the hovered one widens. */
-  .doors { display: flex; gap: 10px; height: clamp(420px, 62vh, 620px); margin-bottom: 72px; }
-  .door { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; padding: 22px; overflow: hidden; border-radius: 22px; transition: flex 0.7s var(--spring), transform 0.5s var(--spring); }
-  .doors:hover .door { flex: 0.8; }
-  .doors .door:hover { flex: 1.6; }
-  .door__foot { display: flex; justify-content: space-between; align-items: baseline; margin-top: auto; }
-  .door__name { font: 600 clamp(26px, 3vw, 40px)/1 var(--grot); letter-spacing: -0.03em; }
-  .door__n { font: 11px/1 var(--mono); letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.6; }
-  .door__line { margin: 8px 0 0; font: 13px/1.4 var(--mono); opacity: 0.7; }
+  .rows { margin-top: 90px; }
+  .row { position: relative; display: grid; grid-template-columns: 1fr minmax(180px, 320px) 56px; gap: 24px; align-items: center; padding: 26px 0; border-top: 1px solid var(--line); }
+  .row:last-child { border-bottom: 1px solid var(--line); }
+  .row__name { font: 600 clamp(72px, 13vw, 210px)/0.86 var(--grot); letter-spacing: -0.065em; transition: transform 0.7s var(--spring); }
+  .row__name sup { font: 500 0.12em/1 var(--grot); letter-spacing: 0; color: var(--signal); vertical-align: 5.2em; margin-left: 0.12em; }
+  .row:hover .row__name { transform: translateX(18px); }
+  .row__line { color: var(--fg-2); font: 15px/1.5 var(--grot); }
+  .row__go { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--glass-2); font-size: 18px; transition: transform 0.6s var(--spring), background 0.3s, color 0.3s; }
+  .row:hover .row__go { background: var(--signal); color: var(--bone); transform: rotate(45deg); }
+  @media (max-width: 760px) { .row { grid-template-columns: 1fr; gap: 10px; } .row__go { display: none; } }
 
-  .door--labs { background: var(--bone); color: var(--void); border-radius: 0; box-shadow: inset 0 0 0 2px var(--void); }
-  .door__chrome { display: flex; align-items: center; gap: 4px; padding-bottom: 10px; border-bottom: 2px solid var(--void); font: 13px/1 var(--screen); }
-  .door__chrome i { width: 10px; height: 10px; border: 2px solid var(--void); }
-  .door__chrome i:first-child { background: var(--void); }
-  .door__chrome span { margin-left: 8px; }
-  .door__pixel { margin: 18px 0 0; font: 700 clamp(34px, 4.6vw, 64px)/0.92 var(--pixel); }
-  .door__bars { display: flex; align-items: flex-end; gap: 3px; height: 90px; margin-top: 18px; }
-  .door__bars span { flex: 1; height: var(--h); background: var(--void); transition: height 0.4s var(--spring); }
-  .door--labs:hover .door__bars span { height: calc(100% - var(--h) + 10%); }
-
-  .door--studio { background: radial-gradient(120% 90% at 20% 0%, #2a2a2a, #0b0b0b 60%); box-shadow: inset 0 0 0 1px #ffffff14; }
-  .door__big { margin: 0; font: 600 clamp(52px, 7vw, 108px)/0.9 var(--grot); letter-spacing: -0.055em; }
-  .door__big sup { font: 500 0.22em/1 var(--grot); color: var(--signal); letter-spacing: 0; vertical-align: 2.6em; margin-left: 4px; }
-  .door__glass { align-self: flex-start; margin-top: 20px; padding: 10px 16px; border-radius: 999px; background: #ffffff10; backdrop-filter: blur(20px); box-shadow: inset 0 1px 0 #ffffff21; font: 500 13px/1 var(--grot); }
-
-  .door--records { background: #e9e6e0; color: #0d0d0d; }
-  .door__cond { margin: 0; font: 800 clamp(64px, 9vw, 150px)/0.8 var(--grot); font-stretch: 62%; letter-spacing: -0.02em; }
-  .door__sleeve { position: absolute; right: 22px; top: 44%; width: 34%; aspect-ratio: 1; background: #0d0d0d; color: #e9e6e0; display: grid; place-items: center; transform: rotate(4deg); transition: transform 0.6s var(--spring); box-shadow: 0 30px 40px -24px #0008; }
-  .door__sleeve span { font: 800 clamp(16px, 2vw, 26px)/0.9 var(--grot); font-stretch: 62%; text-align: center; }
-  .door--records:hover .door__sleeve { transform: rotate(-3deg) translateY(-8px); }
-  @media (max-width: 820px) {
-    .doors { flex-direction: column; height: auto; }
-    .door, .doors:hover .door, .doors .door:hover { flex: none; min-height: 300px; }
-    .door__sleeve { width: 30%; }
-  }
-
-  .now { padding-top: 80px; }
-  .now__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
-  .now__card { display: flex; flex-direction: column; gap: 12px; padding: 24px; min-height: 280px; border-radius: 22px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); transition: transform 0.2s; background-image: radial-gradient(400px circle at var(--gx, 50%) var(--gy, 0%), #ffffff0d, transparent 60%); }
-  .now__kind { font: 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
-  .now__title { font: 600 34px/1 var(--grot); letter-spacing: -0.04em; }
-  .now__line { color: var(--fg-2); font-size: 13px; flex: 1; }
-  .now__card .btn { align-self: flex-start; }
-  @media (max-width: 860px) { .now__grid { grid-template-columns: 1fr; } }
+  .mon { margin-top: 120px; }
+  .mon__card { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; padding: clamp(26px, 5vw, 56px); transition: transform 0.25s var(--ease); }
+  .mon__text { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+  .mon__list { list-style: none; margin: 0; padding: 0; align-self: center; }
+  .mon__list li { display: flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--line); font: 500 16px/1 var(--grot); }
+  .mon__list li span { color: var(--signal); }
+  @media (max-width: 820px) { .mon__card { grid-template-columns: 1fr; } }
 </style>

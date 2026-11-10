@@ -1,117 +1,113 @@
 /**
- * Everything on the site comes from these lists. Add a product, release or tool here
- * and its card and page appear on the next deploy.
+ * All site content. Add an item here and its card and page appear on the next deploy.
+ * Nothing is sold through the site itself: paid items link to Gumroad, free and
+ * pay-what-you-want items link to their download page.
  */
 
-export type Price = { kind: "free" } | { kind: "pwyw"; suggested?: number } | { kind: "paid"; amount: number };
+export type Price = { kind: "free" } | { kind: "pwyw"; suggested?: number } | { kind: "paid"; amount?: number };
+export type Shelf = "plugin" | "kit" | "sample" | "bundle" | "free";
 
-export interface Product {
+export interface Item {
   slug: string;
   name: string;
-  /** Plugin, Drum kit, Sample pack, Bundle, Free drop. */
-  type: "Plugin" | "Drum kit" | "Sample pack" | "Bundle" | "Free drop";
-  /** Short spec line: "VST3 · AU", "40 one-shots · 12 loops"… */
+  shelf: Shelf;
+  /** One line under the name: "Rhythmic glitch engine", "Drum kit"… */
+  kind: string;
+  /** Formats or contents: "VST3 · AU · macOS · Windows", "40 one-shots · 12 loops"… */
   spec: string;
   blurb: string;
   price: Price;
-  /** Gumroad (paid) or a direct download link (free / pay what you want). */
+  /** Gumroad (paid) or download page (free / pay what you want). Leave empty until it's out. */
   url?: string;
-  /** "soon" shows the product greyed out with no buy button. */
   status: "out" | "soon";
-  bpm?: string;
-  key?: string;
-  contents?: { folder: string; count: number; note?: string }[];
+  features?: string[];
+  contents?: { folder: string; count?: number; note?: string }[];
+  /** Cover image URL; a generated cover is drawn when missing. */
+  cover?: string;
+  /** Hue (0–360) for the generated cover. */
+  hue?: number;
 }
 
-export const PRODUCTS: Product[] = [
-  {
-    slug: "drum-kit-01",
-    name: "Drum kit 01",
-    type: "Drum kit",
-    spec: "One-shots · loops · stems",
-    blurb: "The first yondr kit. Contents and name are being finished.",
-    price: { kind: "pwyw" },
-    status: "soon",
-    contents: [{ folder: "drums_", count: 0, note: "TBA" }, { folder: "loops_", count: 0, note: "TBA" }],
-  },
-  {
-    slug: "sample-pack-01",
-    name: "Sample pack 01",
-    type: "Sample pack",
-    spec: "Melodic samples with stems",
-    blurb: "Melodic samples from the yondr sessions, each with its stems.",
-    price: { kind: "pwyw" },
-    status: "soon",
-  },
+export const ITEMS: Item[] = [
   {
     slug: "plugin-01",
     name: "Plugin 01",
-    type: "Plugin",
+    shelf: "plugin",
+    kind: "Instrument / effect",
     spec: "VST3 · AU · macOS · Windows",
-    blurb: "A yondr instrument in the lab. Format and name to be announced.",
-    price: { kind: "paid", amount: 0 },
+    blurb: "The first ARMGDN plugin is on the bench. Name, format and sound to be announced.",
+    price: { kind: "pwyw" },
     status: "soon",
+    features: ["Free or pay what you want at launch", "VST3 and AU", "Free updates"],
+    hue: 0,
   },
-];
-
-export interface Tool {
-  slug: string;
-  name: string;
-  line: string;
-  url?: string;
-  status: "live" | "lab";
-  /** Unsplash photo id used inside the giant lettering. */
-  photo: string;
-  /** Unsplash username, credited under the tool. */
-  by: string;
-}
-
-export const TOOLS: Tool[] = [
-  { slug: "monitor", name: "Monitor", line: "GPU image and video FX. 75 effects, 117 presets, keyframes, export. Free and open source.", url: "/monitor/", status: "live", photo: "1789659822651-df282ece95f7", by: "pawel_czerwinski" },
-  { slug: "next", name: "Next tool", line: "In the lab.", status: "lab", photo: "1561344640-2453889cde5b", by: "chengfengrecord" },
-];
-
-export interface Track { n: number; title: string; length?: string }
-export interface Release {
-  slug: string;
-  title: string;
-  artist: string;
-  /** Single, EP, Album, Beat tape. */
-  format: string;
-  year: string;
-  catalog: string;
-  status: "out" | "soon";
-  /** Cover image URL; a typographic sleeve is drawn when missing. */
-  cover?: string;
-  tracks: Track[];
-  links?: { label: string; url: string }[];
-  credits?: string[];
-}
-
-export const RELEASES: Release[] = [
   {
-    slug: "agdn-001",
-    title: "Untitled 001",
-    artist: "yondr",
-    format: "Single",
-    year: "2026",
-    catalog: "AGDN 001",
+    slug: "kit-01",
+    name: "Kit 01",
+    shelf: "kit",
+    kind: "Drum kit",
+    spec: "One-shots · loops · stems",
+    blurb: "A drum kit from the ARMGDN sessions. Contents are being finished.",
+    price: { kind: "paid" },
     status: "soon",
-    tracks: [{ n: 1, title: "Title to be announced" }],
-    credits: ["Produced by yondr", "Released on ARMGDN Records"],
+    contents: [{ folder: "drums_" }, { folder: "loops_" }, { folder: "fx_" }],
+    hue: 18,
+  },
+  {
+    slug: "samples-01",
+    name: "Samples 01",
+    shelf: "sample",
+    kind: "Sample pack",
+    spec: "Melodic samples with stems",
+    blurb: "Melodic samples, each with its stems. Contents are being finished.",
+    price: { kind: "paid" },
+    status: "soon",
+    contents: [{ folder: "samples_" }, { folder: "stems_" }],
+    hue: 210,
+  },
+  {
+    slug: "free-drop-01",
+    name: "Free drop 01",
+    shelf: "free",
+    kind: "Free sounds",
+    spec: "One-shots for the mailing list",
+    blurb: "Free sounds for people on the list. Sign up and it arrives in your inbox on release.",
+    price: { kind: "free" },
+    status: "soon",
+    hue: 120,
   },
 ];
 
-export interface Artist { slug: string; name: string; role: string; bio: string; links?: { label: string; url: string }[]; open?: boolean }
-
-export const ARTISTS: Artist[] = [
-  { slug: "yondr", name: "yondr", role: "Producer · founder", bio: "Producer behind ARMGDN. Plugins, kits and records under the yondr name." },
-  { slug: "open", name: "Open slot", role: "Future signing", bio: "ARMGDN Records is small on purpose. Send music when submissions open.", open: true },
+export interface Tool { slug: string; name: string; line: string; url: string; status: "live" | "lab"; features: string[] }
+export const TOOLS: Tool[] = [
+  {
+    slug: "monitor",
+    name: "Monitor",
+    line: "GPU image and video FX in the browser. Stack effects, animate them, export. Free and open source.",
+    url: "/labs/monitor/",
+    status: "live",
+    features: ["75 effects", "117 presets", "Keyframes and modulators", "Image and video export", "No account, no watermark", "Open source"],
+  },
 ];
 
-export const SOCIALS = [
+/** Email signup (Buttondown, Kit…). Leave empty and the form says the list opens soon. */
+export const NEWSLETTER_ACTION = "";
+
+export const FOLLOW = [
   { label: "GitHub", url: "https://github.com/armgdnlabs" },
 ];
+/** The producer behind ARMGDN, linked once in the footer. */
+export const YONDR = { label: "yondr", url: "" };
+
+export const SHELVES: Record<Shelf, { title: string; plural: string }> = {
+  plugin: { title: "Plugins", plural: "plugins" },
+  kit: { title: "Kits", plural: "kits" },
+  sample: { title: "Samples", plural: "sample packs" },
+  bundle: { title: "Bundles", plural: "bundles" },
+  free: { title: "Free", plural: "free drops" },
+};
 
 export const priceLabel = (p: Price) =>
-  p.kind === "free" ? "Free" : p.kind === "pwyw" ? (p.suggested ? `Pay what you want · $${p.suggested}+` : "Pay what you want") : p.amount ? `$${p.amount.toFixed(2)}` : "Price TBA";
+  p.kind === "free" ? "Free" : p.kind === "pwyw" ? (p.suggested ? `Pay what you want · $${p.suggested}+` : "Pay what you want") : p.amount ? `$${p.amount.toFixed(2)}` : "Price at launch";
+
+export const itemHref = (i: Item) => (i.shelf === "plugin" ? `/labs/${i.slug}/` : `/sounds/${i.slug}/`);

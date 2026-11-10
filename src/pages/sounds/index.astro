@@ -1,0 +1,69 @@
+---
+import Base from "../../layouts/Base.astro";
+import Ticker from "../../components/Ticker.astro";
+import ItemCard from "../../components/ItemCard.astro";
+import Cover from "../../components/Cover.astro";
+import Signup from "../../components/Signup.astro";
+import { ITEMS, SHELVES, type Shelf } from "../../data/site";
+const sounds = ITEMS.filter((i) => i.shelf !== "plugin");
+const shelves: { id: Shelf; line: string; empty: string }[] = [
+  { id: "kit", line: "Drum kits: one-shots, loops and stems, sold on Gumroad.", empty: "The first kit is being finished." },
+  { id: "sample", line: "Melodic sample packs, every sample with its stems. Sold on Gumroad.", empty: "The first pack is being finished." },
+  { id: "bundle", line: "Kits and packs together, for less.", empty: "Bundles open once there is more than one kit." },
+  { id: "free", line: "Free sounds for people on the mailing list.", empty: "The first drop goes to the list." },
+];
+// The wall behind the hero: real covers first, then generated tiles.
+const wall = Array.from({ length: 18 }, (_, i) => sounds[i % Math.max(sounds.length, 1)]).filter(Boolean);
+---
+<Base title="Sounds" section="sounds" description="ARMGDN Sounds: drum kits, sample packs, bundles and free drops.">
+  <section class="wall">
+    <div class="wall__grid" aria-hidden="true">
+      {wall.map((it, i) => <div class="wall__tile" data-speed={((i % 3) - 1) * 0.06}><Cover item={{ ...it, hue: (it.hue ?? 0) + i * 23 }} label={false} /></div>)}
+    </div>
+    <div class="wall__shade"></div>
+    <div class="wall__in">
+      <h1 class="display lines"><span><span>Sounds.<sup>(kits · samples)</sup></span></span></h1>
+      <p class="lede" data-reveal>Drum kits and sample packs from the ARMGDN sessions, every sample with its stems. <b>Free drops for the mailing list.</b></p>
+      <nav class="wall__nav" data-reveal aria-label="Shelves">
+        {shelves.map((s) => <a class="btn ghost" href={`#${s.id}`} data-magnet><span class="roll"><span>{SHELVES[s.id].title}</span><span>{SHELVES[s.id].title}</span></span></a>)}
+      </nav>
+    </div>
+  </section>
+  <Ticker items={["Drum kits", "Sample packs", "Stems included", "Instant download", "Royalty-free one-shots", "Free drops for the list"]} />
+
+  {shelves.map((s, n) => {
+    const items = sounds.filter((i) => i.shelf === s.id);
+    return (
+      <section class="shelf wrap" id={s.id}>
+        <div class="shelf__head">
+          <h2 class="h2 lines"><span><span>{SHELVES[s.id].title}.<sup>({items.length ? String(items.length).padStart(2, "0") : "soon"})</sup></span></span></h2>
+          <p class="lede" data-reveal>{s.line}</p>
+        </div>
+        {items.length > 0 ? (
+          <div class="shelf__grid">{items.map((it, i) => <ItemCard item={it} n={i + 1} />)}</div>
+        ) : (
+          <div class="shelf__empty card" data-reveal><span data-scramble>{`${SHELVES[s.id].plural.toUpperCase()}_/ EMPTY`}</span><small>{s.empty}</small></div>
+        )}
+      </section>
+    );
+  })}
+
+  <Signup title="Free drops." line="Free sounds go to the list first. Sign up and the next drop lands in your inbox." />
+</Base>
+<style>
+  .wall { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding: 120px var(--gutter) 60px; }
+  .wall__grid { position: absolute; inset: -10% -4%; display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; transform: rotate(-4deg); opacity: 0.55; }
+  .wall__tile :global(.cover) { filter: grayscale(0.7) contrast(1.1); transition: filter 0.6s; }
+  .wall__tile:hover :global(.cover) { filter: none; }
+  .wall__shade { position: absolute; inset: 0; background: radial-gradient(60% 55% at 50% 50%, var(--bg) 20%, transparent 100%), linear-gradient(var(--bg), transparent 25%, transparent 75%, var(--bg)); pointer-events: none; }
+  .wall__in { position: relative; display: flex; flex-direction: column; align-items: center; gap: 24px; text-align: center; }
+  .wall__in .lede { max-width: 52ch; }
+  .wall__nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  @media (max-width: 760px) { .wall__grid { grid-template-columns: repeat(3, 1fr); } }
+  .shelf { margin-top: 120px; }
+  .shelf__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 32px; }
+  .shelf__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .shelf__empty { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; padding: 30px 26px; background-image: repeating-linear-gradient(-45deg, transparent 0 10px, var(--glass) 10px 11px); }
+  .shelf__empty span { font: 700 16px/1 var(--pixel); }
+  .shelf__empty small { font: 13px/1.4 var(--mono); color: var(--muted); }
+</style>

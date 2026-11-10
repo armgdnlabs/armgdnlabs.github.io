@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Picks up new MONITOR releases (built from armgdnlabs/monitor) once a day.
+  schedule:
+    - cron: "17 5 * * *"
 permissions:
   contents: read
   pages: write
@@ -21,6 +24,14 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # MONITOR is its own repo; its build is served from /labs/monitor/.
+      - uses: actions/checkout@v4
+        with:
+          repository: armgdnlabs/monitor
+          path: monitor-src
+      - run: npm ci && npm run build
+        working-directory: monitor-src
+      - run: mkdir -p dist/labs/monitor && cp -r monitor-src/dist/. dist/labs/monitor/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

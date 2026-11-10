@@ -1,0 +1,48 @@
+---
+/** Section hero (after atrumlab's shop pages): two panels, a giant word across both, a ticker under. */
+interface Panel { title: string; line: string; href: string; cta: string; price?: string; art?: "field" | "wave" | "photo"; bg?: string }
+interface Props { word: string; sup?: string; left: Panel; right: Panel }
+const { word, sup, left, right } = Astro.props;
+---
+<section class="sh">
+  {[left, right].map((p, i) => (
+    <a class={`sh__panel sh__panel--${i}`} href={p.href} data-cursor={p.cta} data-astro-reload={p.href.includes("/monitor/") ? true : undefined}>
+      {p.art === "field" && <canvas data-field class="sh__field"></canvas>}
+      {p.art === "wave" && <div class="sh__wave" aria-hidden="true">{Array.from({ length: 56 }, (_, k) => <span style={`--d:${(k * 137) % 1000}ms;--s:${0.25 + ((k * 53) % 70) / 100}`}></span>)}</div>}
+      {p.art === "photo" && <div class="sh__bg" style={p.bg ? `background-image:${p.bg}` : ""}></div>}
+      <div class="sh__shade"></div>
+      <div class="sh__top"><span class="sh__n">0{i + 1}</span><span class="sh__title">{p.title}</span><span class="sh__line">{p.line}</span></div>
+      <div class="sh__bot">{p.price && <span class="sh__price">{p.price}</span>}<span class="btn ghost"><span class="roll"><span>{p.cta}</span><span>{p.cta}</span></span><span class="pip"></span></span></div>
+    </a>
+  ))}
+  <h1 class="sh__word display lines" aria-label={word}><span><span>{word}{sup && <sup>({sup})</sup>}</span></span></h1>
+</section>
+<style>
+  .sh { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; height: min(100svh, 900px); padding: 76px 8px 8px; }
+  .sh__panel { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 22px; overflow: hidden; border-radius: 26px; background: var(--bg-2); box-shadow: inset 0 0 0 1px var(--line); color: #f7f2ec; }
+  .sh__field, .sh__bg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .sh__bg { background-size: cover; background-position: center; filter: grayscale(1) contrast(1.05) brightness(0.55); transform: scale(1.05); transition: transform 1.4s var(--spring), filter 0.8s; }
+  .sh__panel:hover .sh__bg { transform: scale(1.12); filter: grayscale(0.2) brightness(0.65); }
+  .sh__wave { position: absolute; inset: 22% 6% 26%; display: flex; align-items: center; gap: 4px; }
+  .sh__wave span { flex: 1; height: 100%; border-radius: 2px; background: linear-gradient(transparent, var(--signal) 30%, #f7f2ec 50%, var(--signal) 70%, transparent); transform: scaleY(var(--s)); animation: osc 1.6s var(--d) ease-in-out infinite alternate; opacity: 0.85; }
+  .sh__panel:hover .sh__wave span { animation-duration: 0.5s; }
+  @keyframes osc { to { transform: scaleY(calc(var(--s) * 0.15)); } }
+  .sh__shade { position: absolute; inset: 0; background: linear-gradient(#0000 40%, #000a); pointer-events: none; }
+  :global([data-theme="light"]) .sh__panel--0 { color: var(--void); }
+  :global([data-theme="light"]) .sh__panel--0 .sh__shade { background: linear-gradient(#0000 50%, #f7f2ec99); }
+  .sh__top, .sh__bot { position: relative; z-index: 1; display: flex; align-items: flex-start; gap: 10px; }
+  .sh__top { flex-direction: column; gap: 6px; }
+  .sh__panel--1 .sh__top { align-items: flex-end; text-align: right; }
+  .sh__n { font: 500 11px/1 var(--mono); opacity: 0.6; }
+  .sh__title { font: 600 22px/1 var(--grot); letter-spacing: -0.03em; }
+  .sh__line { font: 13px/1.3 var(--grot); opacity: 0.7; }
+  .sh__bot { justify-content: space-between; align-items: center; }
+  .sh__panel--1 .sh__bot { flex-direction: row-reverse; }
+  .sh__price { font: 600 clamp(28px, 3vw, 40px)/1 var(--grot); letter-spacing: -0.04em; }
+  .sh__word { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); z-index: 2; text-align: center; pointer-events: none; color: #f7f2ec; mix-blend-mode: difference; }
+  @media (max-width: 760px) {
+    .sh { grid-template-columns: 1fr; height: auto; }
+    .sh__panel { min-height: 46svh; }
+    .sh__word { top: 46svh; }
+  }
+</style>

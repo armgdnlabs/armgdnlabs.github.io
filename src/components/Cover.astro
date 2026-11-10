@@ -1,0 +1,11 @@
+---
+/** Product art: the item's cover image, or a generated dithered cover in its hue. */
+import type { Item } from "../data/site";
+interface Props { item: Item; label?: boolean }
+const { item, label = true } = Astro.props;
+---
+<div class="cover" style={`--h:${item.hue ?? 0}`}>
+  {item.cover && <img src={item.cover} alt="" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" />}
+  {label && <span class="cover__tag">{item.kind}</span>}
+  {label && <span class="cover__name">{item.name}</span>}
+</div>
