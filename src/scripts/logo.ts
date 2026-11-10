@@ -1,7 +1,6 @@
 /**
  * The ARMGDN wordmark as a live surface: near the cursor the letters bulge, thicken and break
- * into pixels with a red/bone channel split; every few seconds a glitch burst runs through it
- * on its own. The SVG stays underneath for layout, accessibility and as the no-WebGL fallback.
+ * into pixels with a red/bone channel split. The SVG stays underneath for layout, accessibility and as the no-WebGL fallback.
  */
 const FRAG = `#version 300 es
 precision highp float;
@@ -75,7 +74,7 @@ export function mountLogo(canvas: HTMLCanvasElement, svg: SVGSVGElement, mouse: 
 
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const hex = (v: string) => { const n = parseInt(v.trim().slice(1), 16); return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]; };
-  let hover = 0, burst = 0, nextBurst = performance.now() + 2200, seed = 0, alive = true, visible = true;
+  let hover = 0, burst = 0, seed = 0, alive = true, visible = true;
   const sm = { x: 0.5, y: 0.5 };
   const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }); io.observe(canvas);
   const frame = (t: number) => {
@@ -88,8 +87,6 @@ export function mountLogo(canvas: HTMLCanvasElement, svg: SVGSVGElement, mouse: 
       const inside = mx > -0.05 && mx < 1.05 && my > -0.3 && my < 1.3;
       hover += ((inside && !reduce ? 1 : 0) - hover) * 0.08;
       sm.x += (mx - sm.x) * 0.3; sm.y += (my - sm.y) * 0.3;
-      // Idle glitch every few seconds, a short decaying burst.
-      if (!reduce && t > nextBurst) { burst = 1; seed = Math.random() * 100; nextBurst = t + 3200 + Math.random() * 2600; }
       burst *= 0.9;
       const cs = getComputedStyle(document.documentElement);
       gl.viewport(0, 0, w, hgt); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
