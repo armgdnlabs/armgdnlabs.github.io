@@ -1,5 +1,6 @@
 import Lenis from "lenis";
 import { mountField } from "./field";
+import { mountLogo } from "./logo";
 
 /*
  * Site-wide motion. Things that live across page transitions (scroll, cursor, background,
@@ -29,6 +30,22 @@ const raf = (t: number) => {
 };
 requestAnimationFrame(raf);
 document.addEventListener("astro:after-swap", () => { lenis?.scrollTo(0, { immediate: true }); });
+
+/* Page loads that take more than ~250 ms show a small pixel spinner and dim the page. */
+let navTimer = 0;
+const navload = document.getElementById("navload");
+document.addEventListener("astro:before-preparation", () => {
+  navTimer = window.setTimeout(() => { navload?.classList.add("on"); root.classList.add("navigating"); }, 250);
+});
+// Full-page loads (Monitor) show it straight away.
+document.addEventListener("click", (e) => {
+  const a = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[data-astro-reload]");
+  if (a && !e.metaKey && !e.ctrlKey) { navload?.classList.add("on"); root.classList.add("navigating"); }
+});
+addEventListener("pageshow", () => { navload?.classList.remove("on"); root.classList.remove("navigating"); });
+document.addEventListener("astro:after-swap", () => {
+  clearTimeout(navTimer); navload?.classList.remove("on"); root.classList.remove("navigating");
+});
 
 /* ── Loader: once per visit, counts to 100 while fonts and the first paint settle ── */
 (() => {
@@ -194,6 +211,10 @@ document.addEventListener("astro:page-load", () => {
   }
 
   document.querySelectorAll<HTMLCanvasElement>("canvas[data-field]").forEach((c) => { const stop = mountField(c, mouse); cleanups.push(stop); });
+  document.querySelectorAll<HTMLElement>("[data-logofx]").forEach((el) => {
+    const c = el.querySelector("canvas"), svg = el.querySelector("svg");
+    if (c && svg) cleanups.push(mountLogo(c, svg, mouse));
+  });
 
   // Mailing list: posts to the provider when one is configured.
   document.querySelectorAll<HTMLFormElement>("form[data-signup]").forEach((f) => {

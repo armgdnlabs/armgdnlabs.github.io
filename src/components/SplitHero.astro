@@ -1,6 +1,6 @@
 ---
 /** Section hero (after atrumlab's shop pages): two panels, a giant word across both, a ticker under. */
-interface Panel { title: string; line: string; href: string; cta: string; price?: string; art?: "field" | "wave" | "photo"; bg?: string }
+interface Panel { title: string; line: string; href: string; cta: string; price?: string; art?: "field" | "cone" | "photo"; bg?: string }
 interface Props { word: string; sup?: string; left: Panel; right: Panel }
 const { word, sup, left, right } = Astro.props;
 ---
@@ -8,7 +8,7 @@ const { word, sup, left, right } = Astro.props;
   {[left, right].map((p, i) => (
     <a class={`sh__panel sh__panel--${i}`} href={p.href} data-cursor={p.cta} data-astro-reload={p.href.includes("/monitor/") ? true : undefined}>
       {p.art === "field" && <canvas data-field class="sh__field"></canvas>}
-      {p.art === "wave" && <div class="sh__wave" aria-hidden="true">{Array.from({ length: 56 }, (_, k) => <span style={`--d:${(k * 137) % 1000}ms;--s:${0.25 + ((k * 53) % 70) / 100}`}></span>)}</div>}
+      {p.art === "cone" && <canvas data-field="cone" class="sh__field"></canvas>}
       {p.art === "photo" && <div class="sh__bg" style={p.bg ? `background-image:${p.bg}` : ""}></div>}
       <div class="sh__shade"></div>
       <div class="sh__top"><span class="sh__n">0{i + 1}</span><span class="sh__title">{p.title}</span><span class="sh__line">{p.line}</span></div>
@@ -23,10 +23,6 @@ const { word, sup, left, right } = Astro.props;
   .sh__field, .sh__bg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .sh__bg { background-size: cover; background-position: center; filter: grayscale(1) contrast(1.05) brightness(0.55); transform: scale(1.05); transition: transform 1.4s var(--spring), filter 0.8s; }
   .sh__panel:hover .sh__bg { transform: scale(1.12); filter: grayscale(0.2) brightness(0.65); }
-  .sh__wave { position: absolute; inset: 22% 6% 26%; display: flex; align-items: center; gap: 4px; }
-  .sh__wave span { flex: 1; height: 100%; border-radius: 2px; background: linear-gradient(transparent, var(--signal) 30%, #f7f2ec 50%, var(--signal) 70%, transparent); transform: scaleY(var(--s)); animation: osc 1.6s var(--d) ease-in-out infinite alternate; opacity: 0.85; }
-  .sh__panel:hover .sh__wave span { animation-duration: 0.5s; }
-  @keyframes osc { to { transform: scaleY(calc(var(--s) * 0.15)); } }
   .sh__shade { position: absolute; inset: 0; background: linear-gradient(#0000 40%, #000a); pointer-events: none; }
   :global([data-theme="light"]) .sh__panel--0 { color: var(--void); }
   :global([data-theme="light"]) .sh__panel--0 .sh__shade { background: linear-gradient(#0000 50%, #f7f2ec99); }

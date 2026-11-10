@@ -4,7 +4,7 @@
  */
 const FRAG = `#version 300 es
 precision highp float;
-uniform vec2 uRes; uniform vec2 uMouse; uniform float uTime; uniform float uLight; uniform float uPx;
+uniform vec2 uRes; uniform vec2 uMouse; uniform float uTime; uniform float uLight; uniform float uPx; uniform float uMode;
 out vec4 o;
 float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
 float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
@@ -23,6 +23,14 @@ void main() {
   float t = uTime * 0.05;
   float v = fbm(uv * 2.2 + warp * 6.0 + vec2(t, -t * 0.7) + fbm(uv * 1.3 - t) * 1.5);
   v = smoothstep(0.25, 0.85, v) + exp(-d * 6.0) * 0.35;
+  if (uMode > 0.5) {
+    // Speaker cone: rings pumping out from the centre, bent by the cursor.
+    vec2 c = vec2(uRes.x / uRes.y * 0.5, 0.5);
+    vec2 p = uv - c + warp * 2.0;
+    float r = length(p), a = atan(p.y, p.x);
+    float pump = 0.5 + 0.5 * sin(uTime * 2.4);
+    v = (0.5 + 0.5 * sin(r * 46.0 - uTime * 3.0 + sin(a * 3.0 + uTime) * 1.2)) * smoothstep(0.62, 0.05, r) * (0.75 + pump * 0.25) + exp(-d * 6.0) * 0.3;
+  }
   float on = step(bayer(cell), v);
   float accent = step(0.86, v) * step(bayer(cell + 7.0), (v - 0.86) * 3.0);
   vec3 bg = mix(vec3(0.031), vec3(0.969, 0.949, 0.925), uLight);
@@ -47,7 +55,8 @@ export function mountField(canvas: HTMLCanvasElement, mouse: { x: number; y: num
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
   const loc = gl.getAttribLocation(prog, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   const u = (n: string) => gl.getUniformLocation(prog, n);
-  const uRes = u("uRes"), uMouse = u("uMouse"), uTime = u("uTime"), uLight = u("uLight"), uPx = u("uPx");
+  const uRes = u("uRes"), uMouse = u("uMouse"), uTime = u("uTime"), uLight = u("uLight"), uPx = u("uPx"), uMode = u("uMode");
+  const mode = canvas.dataset.field === "cone" ? 1 : 0;
   const sm = { x: 0, y: 0 };
   let visible = true, alive = true;
   const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
@@ -66,6 +75,7 @@ export function mountField(canvas: HTMLCanvasElement, mouse: { x: number; y: num
       gl.uniform1f(uTime, reduce ? 0 : t / 1000);
       gl.uniform1f(uLight, document.documentElement.dataset.theme === "light" ? 1 : 0);
       gl.uniform1f(uPx, 3 * dpr);
+      gl.uniform1f(uMode, mode);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
     requestAnimationFrame(frame);

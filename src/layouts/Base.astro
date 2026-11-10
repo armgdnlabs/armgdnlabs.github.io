@@ -60,6 +60,7 @@ const org = { "@context": "https://schema.org", "@type": "Organization", name: "
     <canvas class="bg" id="bg" transition:persist aria-hidden="true"></canvas>
     <div class="cursor" id="cursor" transition:persist aria-hidden="true"><span class="cursor__dot"></span><span class="cursor__ring"><span class="cursor__label"></span></span></div>
     <div class="progress" id="progress" transition:persist aria-hidden="true"></div>
+    <div class="navload" id="navload" transition:persist aria-hidden="true"><span class="navload__px"></span><span class="navload__t">Loading</span></div>
 
     <header class="hdr" transition:persist>
       <a class="hdr__home" href="/" aria-label="ARMGDN home" data-magnet>
@@ -73,7 +74,6 @@ const org = { "@context": "https://schema.org", "@type": "Organization", name: "
         <button class="theme" id="theme" aria-label="Switch light or dark" data-cursor="Theme">
           <span class="theme__track"><span class="theme__knob"></span></span>
         </button>
-        <a class="hdr__monitor btn ghost" href="/labs/monitor/" data-astro-reload data-magnet><span class="dot-live"></span><span class="roll"><span>Monitor</span><span>Monitor</span></span></a>
       </div>
     </header>
 
@@ -138,6 +138,12 @@ const org = { "@context": "https://schema.org", "@type": "Organization", name: "
   .loader__bar { height: 1px; background: #f7f2ec26; }
   .loader__bar span { display: block; height: 100%; width: 0; background: var(--signal); }
 
+  /* Shown only when a page takes longer than a moment to arrive. */
+  .navload { position: fixed; right: var(--gutter); bottom: 22px; z-index: 90; display: flex; align-items: center; gap: 10px; padding: 9px 14px 9px 10px; border-radius: 999px; background: var(--glass-2); backdrop-filter: blur(18px); box-shadow: inset 0 0 0 1px var(--line-2); font: 700 10px/1 var(--pixel); text-transform: uppercase; opacity: 0; transform: translateY(12px); transition: opacity 0.3s, transform 0.4s var(--spring); pointer-events: none; }
+  :global(.navload.on) { opacity: 1; transform: none; }
+  .navload__px { width: 14px; height: 14px; background: conic-gradient(var(--signal) 0 25%, var(--fg) 0 50%, var(--signal) 0 75%, var(--fg) 0); image-rendering: pixelated; animation: navspin 0.6s steps(4) infinite; }
+  @keyframes navspin { to { transform: rotate(360deg); } }
+  :global(html.navigating) main { opacity: 0.35; filter: blur(2px); transition: opacity 0.3s, filter 0.3s; }
   .bg { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
   .progress { position: fixed; top: 0; left: 0; z-index: 70; height: 2px; width: 100%; background: var(--signal); transform-origin: 0 50%; transform: scaleX(0); }
 

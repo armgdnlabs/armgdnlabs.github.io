@@ -6,68 +6,85 @@ import ItemCard from "../../components/ItemCard.astro";
 import Signup from "../../components/Signup.astro";
 import { ITEMS, TOOLS } from "../../data/site";
 const plugins = ITEMS.filter((i) => i.shelf === "plugin");
-const monitor = TOOLS[0];
+const live = TOOLS.filter((t) => t.status === "live");
 ---
-<Base title="Labs" section="labs" description="ARMGDN Labs: experimental plugins, web apps and creative tools. Monitor, the free GPU image and video FX editor, is live.">
+<Base title="Labs" section="labs" description="ARMGDN Labs: studio tools for sound and image that run in the browser, and experimental plugins. Monitor, the free GPU image and video FX editor, is live.">
   <SplitHero
     word="Labs." sup="experimental"
-    left={{ title: "Monitor", line: "GPU image & video FX", href: monitor.url, cta: "Open Monitor", price: "Free", art: "field" }}
-    right={{ title: plugins[0]?.name ?? "Plugins", line: "First plugin · in the lab", href: "#plugins", cta: "See plugins", price: "Soon", art: "wave" }}
+    left={{ title: "Tools", line: "Studio web apps · audio & visual", href: "#tools", cta: "See tools", price: `${live.length} live`, art: "field" }}
+    right={{ title: "Plugins", line: "VST3 · AU · in the lab", href: "#plugins", cta: "See plugins", price: "Soon", art: "cone" }}
   />
-  <Ticker items={["Monitor", "Free", "Open source", "75 effects", "117 presets", "Keyframes", "Plugins in the lab", "VST3 · AU"]} />
+  <Ticker items={["Tools", "Monitor is live", "Free", "Open source", "Runs in the browser", "Plugins", "In the lab", "VST3 · AU"]} />
 
-  <section class="tool wrap" id="tools">
-    <div class="tool__head">
-      <p class="kick" data-reveal>Web app · live</p>
-      <h2 class="display lines"><span><span>Monitor.<sup>(free)</sup></span></span></h2>
-      <p class="lede" data-reveal><b>{monitor.line}</b> Runs on your GPU. Nothing to install, no account.</p>
-    </div>
-    <div class="tool__grid">
-      <a class="tool__shot card" href={monitor.url} data-astro-reload data-tilt data-cursor="Launch" data-reveal>
-        <canvas data-field class="tool__field"></canvas>
-        <span class="tool__label" data-scramble>MONITOR // FX</span>
-      </a>
-      <div class="tool__card glass" data-reveal>
-        <div class="tool__price"><span>$0</span><span class="tool__forever">forever</span></div>
-        <ul class="tool__list">{monitor.features.map((f) => <li><span>+</span>{f}</li>)}</ul>
-        <a class="btn red" href={monitor.url} data-astro-reload data-magnet><span class="roll"><span>Open Monitor</span><span>Open Monitor</span></span><span class="pip"></span></a>
-        <a class="btn ghost" href="https://github.com/armgdnlabs/monitor" rel="noopener"><span class="roll"><span>Source on GitHub</span><span>Source on GitHub</span></span></a>
+  <section class="sec wrap" id="tools">
+    <div class="sec__head">
+      <div>
+        <p class="kick" data-reveal>Studio tools</p>
+        <h2 class="display lines"><span><span>Tools.<sup>(studio)</sup></span></span></h2>
       </div>
+      <p class="lede" data-reveal>Studio software that runs in the browser, for sound and for image. <b>Free, open source, no account.</b></p>
+    </div>
+
+    {TOOLS.map((t) => (
+      <div class="tool">
+        <a class="tool__shot card" href={t.url} data-astro-reload data-tilt data-cursor={`Open ${t.name}`} data-reveal>
+          <canvas data-field class="tool__field"></canvas>
+          <span class="tool__label" data-scramble>{t.name.toUpperCase()} // FX</span>
+          <span class="tool__status"><span class="dot-live"></span> Live</span>
+        </a>
+        <div class="tool__card glass" data-reveal>
+          <p class="kick">Visual · web app</p>
+          <h3 class="tool__name">{t.name}.<sup>(free)</sup></h3>
+          <p class="tool__line">{t.line}</p>
+          <ul class="tool__list">{t.features.map((f) => <li><span>+</span>{f}</li>)}</ul>
+          <div class="tool__btns">
+            <a class="btn red" href={t.url} data-astro-reload data-magnet><span class="roll"><span>Open {t.name}</span><span>Open {t.name}</span></span><span class="pip"></span></a>
+            <a class="btn ghost" href={`https://github.com/armgdnlabs/${t.slug}`} rel="noopener"><span class="roll"><span>Source</span><span>Source</span></span></a>
+          </div>
+        </div>
+      </div>
+    ))}
+    <div class="next card" data-reveal>
+      <span class="next__tag" data-scramble>NEXT_TOOL // AUDIO</span>
+      <p>The next studio tool is for sound. Join the list to try it first.</p>
     </div>
   </section>
 
-  <section class="plug wrap" id="plugins">
-    <div class="plug__head">
-      <h2 class="h2 lines"><span><span>Plugins.<sup>(in the lab)</sup></span></span></h2>
-      <p class="lede" data-reveal>The first ARMGDN plugins launch <b>free or pay what you want</b>. VST3 and AU, macOS and Windows.</p>
+  <section class="sec wrap" id="plugins">
+    <div class="sec__head">
+      <div>
+        <p class="kick" data-reveal>Audio plugins</p>
+        <h2 class="display lines"><span><span>Plugins.<sup>(in the lab)</sup></span></span></h2>
+      </div>
+      <p class="lede" data-reveal>Instruments and effects for your DAW. The first ones launch <b>free or pay what you want</b>, VST3 and AU, macOS and Windows.</p>
     </div>
-    <div class="plug__grid">
+    <div class="grid">
       {plugins.map((p, i) => <ItemCard item={p} n={i + 1} />)}
-      <div class="plug__ghost card" data-reveal><span data-scramble>NEXT_BUILD.EXE</span><small>Join the list to get beta builds first.</small></div>
     </div>
   </section>
 
   <Signup title="Beta builds." line="Early plugin builds and new tools go to the list first." />
 </Base>
 <style>
-  .tool { margin-top: 110px; }
-  .tool__head { display: flex; flex-direction: column; gap: 22px; margin-bottom: 40px; }
-  .tool__grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
-  .tool__shot { position: relative; min-height: 440px; transition: transform 0.25s var(--ease); }
+  .sec { margin-top: 130px; }
+  .sec__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 28px; margin-bottom: 40px; }
+  .sec__head .kick { margin: 0 0 18px; }
+  .tool { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
+  .tool__shot { position: relative; min-height: 480px; transition: transform 0.25s var(--ease); }
   .tool__field { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .tool__label { position: absolute; left: 20px; bottom: 18px; font: 700 13px/1 var(--pixel); color: var(--fg); }
-  .tool__card { display: flex; flex-direction: column; gap: 16px; padding: 28px; }
-  .tool__price { display: flex; align-items: baseline; gap: 10px; font: 600 64px/1 var(--grot); letter-spacing: -0.05em; }
-  .tool__forever { font: 500 14px/1 var(--grot); color: var(--fg-2); letter-spacing: 0; }
-  .tool__list { list-style: none; margin: 0 0 8px; padding: 0; flex: 1; }
-  .tool__list li { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); font: 500 15px/1 var(--grot); }
+  .tool__label { position: absolute; left: 20px; bottom: 18px; font: 700 13px/1 var(--pixel); }
+  .tool__status { position: absolute; right: 18px; top: 18px; padding: 8px 12px; border-radius: 999px; background: var(--glass-2); backdrop-filter: blur(14px); font: 600 12px/1 var(--grot); }
+  .tool__card { display: flex; flex-direction: column; gap: 14px; padding: 28px; }
+  .tool__name { margin: 4px 0 0; font: 600 clamp(48px, 5vw, 76px)/0.9 var(--grot); letter-spacing: -0.05em; }
+  .tool__name sup { font: 500 0.22em/1 var(--grot); letter-spacing: 0; color: var(--signal); vertical-align: 3em; margin-left: 4px; }
+  .tool__line { margin: 0; color: var(--fg-2); font: 15px/1.5 var(--grot); }
+  .tool__list { list-style: none; margin: 0; padding: 0; flex: 1; }
+  .tool__list li { display: flex; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); font: 500 14px/1 var(--grot); }
   .tool__list li span { color: var(--signal); }
-  .tool__card .btn { justify-content: space-between; }
-  @media (max-width: 820px) { .tool__grid { grid-template-columns: 1fr; } .tool__shot { min-height: 300px; } }
-  .plug { margin-top: 130px; }
-  .plug__head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 36px; }
-  .plug__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-  .plug__ghost { display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; min-height: 360px; padding: 22px; background-image: repeating-linear-gradient(-45deg, transparent 0 10px, var(--glass) 10px 11px); }
-  .plug__ghost span { font: 700 18px/1 var(--pixel); }
-  .plug__ghost small { font: 12px/1.4 var(--mono); color: var(--muted); }
+  .tool__btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .next { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; padding: 26px; background-image: repeating-linear-gradient(-45deg, transparent 0 10px, var(--glass) 10px 11px); }
+  .next__tag { font: 700 15px/1 var(--pixel); }
+  .next p { margin: 0; font: 13px/1.4 var(--mono); color: var(--muted); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  @media (max-width: 860px) { .tool { grid-template-columns: 1fr; } .tool__shot { min-height: 300px; } }
 </style>
