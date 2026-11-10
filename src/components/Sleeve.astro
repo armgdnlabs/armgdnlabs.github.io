@@ -1,0 +1,26 @@
+---
+/** A record sleeve: the cover image, or a typographic sleeve built from the catalogue number. */
+import type { Release } from "../data/site";
+interface Props { r: Release; class?: string }
+const { r, class: cls = "" } = Astro.props;
+---
+<div class={`sleeve ${cls}`}>
+  {r.cover ? <img src={r.cover} alt={`${r.title} cover`} loading="lazy" /> : (
+    <div class="sleeve__type">
+      <span class="sleeve__cat">{r.catalog}</span>
+      <span class="sleeve__title">{r.title}</span>
+      <span class="sleeve__artist">{r.artist}</span>
+    </div>
+  )}
+  <span class="sleeve__edge" aria-hidden="true"></span>
+</div>
+<style>
+  .sleeve { position: relative; aspect-ratio: 1; background: #0d0d0d; color: #e9e6e0; overflow: hidden; box-shadow: 0 30px 50px -28px #000a; }
+  .sleeve img { width: 100%; height: 100%; object-fit: cover; }
+  .sleeve__type { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 7%; }
+  .sleeve__cat { font: 11px/1 var(--mono); letter-spacing: 0.14em; }
+  .sleeve__title { font: 800 clamp(30px, 6vw, 84px)/0.82 var(--grot); font-stretch: 62%; text-transform: uppercase; }
+  .sleeve__artist { font: 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; }
+  /* Film-strip edge, like a contact sheet. */
+  .sleeve__edge { position: absolute; inset: 0; border: 9px solid transparent; border-image: repeating-linear-gradient(90deg, #e9e6e0 0 6px, transparent 6px 14px) 9; opacity: 0.35; pointer-events: none; }
+</style>

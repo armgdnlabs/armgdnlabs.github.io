@@ -1,0 +1,35 @@
+---
+import Base from "../../../layouts/Base.astro";
+import Sleeve from "../../../components/Sleeve.astro";
+import { ARTISTS, RELEASES, type Artist } from "../../../data/site";
+export function getStaticPaths() { return ARTISTS.filter((a) => !a.open).map((a) => ({ params: { slug: a.slug }, props: { a } })); }
+const { a } = Astro.props as { a: Artist };
+const theirs = RELEASES.filter((r) => r.artist.toLowerCase() === a.name.toLowerCase());
+---
+<Base title={a.name} zone="records" description={`${a.name} on ARMGDN Records. ${a.bio}`}>
+  <section class="art wrap">
+    <a class="mono" href="/records/">← Records</a>
+    <h1 class="art__name lines"><span><span>{a.name}</span></span></h1>
+    <div class="art__row" data-reveal>
+      <p class="mono">{a.role}</p>
+      <p class="art__bio">{a.bio}</p>
+    </div>
+  </section>
+  <section class="wrap">
+    <p class="mono">( releases )</p>
+    <div class="cat">{theirs.map((r) => (
+      <a href={`/records/${r.slug}/`} class="cat__item" data-reveal><Sleeve r={r} /><span class="cat__t">{r.title}</span><span class="mono">{r.catalog} · {r.status === "out" ? r.year : "soon"}</span></a>
+    ))}</div>
+  </section>
+</Base>
+<style>
+  .mono { font: 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-2); }
+  .art { padding: 36px 0 60px; }
+  .art__name { margin: 30px 0; font: 900 clamp(110px, 26vw, 420px)/0.8 var(--grot); font-stretch: 62%; text-transform: uppercase; }
+  .art__row { display: grid; grid-template-columns: 200px minmax(0, 560px); gap: 24px; }
+  .art__bio { margin: 0; font: 500 22px/1.35 var(--grot); }
+  @media (max-width: 640px) { .art__row { grid-template-columns: 1fr; } }
+  .cat { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; margin-top: 18px; }
+  .cat__item { display: flex; flex-direction: column; gap: 8px; }
+  .cat__t { font: 600 18px/1 var(--grot); }
+</style>

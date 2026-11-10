@@ -1,0 +1,13 @@
+---
+import { SYMBOL, WORDMARK_REST } from "../data/marks";
+interface Props { kind?: "symbol" | "wordmark"; class?: string; label?: string }
+const { kind = "symbol", class: cls = "", label = "ARMGDN" } = Astro.props;
+---
+{kind === "symbol" ? (
+  <svg viewBox="0 0 106 128" class={cls} role="img" aria-label={label} fill="currentColor"><path d={SYMBOL} /></svg>
+) : (
+  <svg viewBox="0 0 1024 130" class={cls} role="img" aria-label={label} fill="currentColor">
+    <path d={SYMBOL} />
+    {WORDMARK_REST.map((d) => <path d={d} />)}
+  </svg>
+)}

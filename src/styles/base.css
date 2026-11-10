@@ -1,0 +1,84 @@
+/* ARMGDN — tokens mirror the Figma brand system (Foundations 1:2). */
+:root {
+  --void: #0a0a0a; --ink: #1e1e1e; --ash-900: #262523; --ash-700: #4a4845; --ash-500: #85827d;
+  --ash-300: #bdb9b2; --bone-200: #ede7df; --bone: #f7f2ec; --signal: #d3202a;
+  --serif: "Tinos", "Times New Roman", serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --pixel: "Silkscreen", "VT323", monospace;
+  --screen: "VT323", monospace;
+  --grot: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --gutter: clamp(16px, 4vw, 40px);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --spring: cubic-bezier(0.2, 0.9, 0.25, 1);
+  /* Zone colours, overridden per section below. */
+  --bg: var(--void); --fg: var(--bone); --fg-2: var(--ash-300); --muted: var(--ash-500); --line: #ffffff1f; --card: #141413;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 var(--mono); overflow-x: hidden; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.wrap { width: min(1280px, 100% - 2 * var(--gutter)); margin-inline: auto; }
+
+/* `// LABEL` device: mono, slashes muted. */
+.tag { font: 500 11px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-2); }
+.tag::before { content: "// "; color: var(--muted); }
+.dot-live { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--signal); box-shadow: 0 0 0 0 #d3202a80; animation: pulse 1.8s infinite; vertical-align: 1px; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 7px #d3202a00; } 100% { box-shadow: 0 0 0 0 #d3202a00; } }
+
+/* ── Roll button: the label slides up and a copy rolls in from below. ── */
+.btn {
+  --b-bg: var(--fg); --b-fg: var(--bg);
+  display: inline-flex; align-items: center; gap: 12px; height: 44px; padding: 0 18px 0 20px; border-radius: 999px;
+  background: var(--b-bg); color: var(--b-fg); font: 600 13px/1 var(--grot); letter-spacing: 0.01em; white-space: nowrap;
+  transition: transform 0.35s var(--spring), background 0.25s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn.ghost { --b-bg: transparent; --b-fg: var(--fg); box-shadow: inset 0 0 0 1px var(--line); }
+.roll { display: inline-grid; overflow: hidden; height: 1.15em; line-height: 1.15em; }
+.roll > span { grid-area: 1 / 1; transition: transform 0.45s var(--spring); }
+.roll > span + span { transform: translateY(100%); }
+a:hover .roll > span, button:hover .roll > span { transform: translateY(-100%); }
+a:hover .roll > span + span, button:hover .roll > span + span { transform: translateY(0); }
+.btn .pip { position: relative; width: 8px; height: 8px; border-radius: 50%; background: var(--signal); transition: transform 0.45s var(--spring); }
+.btn:hover .pip { transform: scale(2.2); }
+
+/* ── Scroll reveals ── */
+[data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+[data-reveal].in { opacity: 1; transform: none; }
+.lines > span { display: block; overflow: hidden; }
+.lines > span > span { display: block; transform: translateY(105%); transition: transform 0.9s var(--spring); }
+.in .lines > span > span, .lines.in > span > span { transform: none; }
+.lines > span:nth-child(2) > span { transition-delay: 0.08s; }
+.lines > span:nth-child(3) > span { transition-delay: 0.16s; }
+
+/* ── Marquee ── */
+.marquee { overflow: hidden; border-block: 1px solid var(--line); }
+.marquee__track { display: flex; width: max-content; animation: run 38s linear infinite; }
+.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee__item { display: flex; align-items: center; gap: 28px; padding: 14px 28px 14px 0; font: 500 clamp(28px, 5vw, 64px)/1 var(--grot); letter-spacing: -0.03em; color: var(--muted); white-space: nowrap; }
+.marquee__item i { color: var(--signal); font-style: normal; font-size: 0.6em; }
+@keyframes run { to { transform: translateX(-50%); } }
+
+/* ── Corner ticks: rotate when their section is hovered. ── */
+.ticks { position: relative; }
+.ticks::before, .ticks::after { content: "+"; position: absolute; font: 300 18px/1 var(--mono); color: var(--muted); transition: transform 0.5s var(--spring), color 0.3s; }
+.ticks::before { top: 10px; left: 10px; }
+.ticks::after { top: 10px; right: 10px; }
+.ticks:hover::before, .ticks:hover::after { transform: rotate(90deg); color: var(--signal); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  [data-reveal], .lines > span > span { opacity: 1; transform: none; }
+}
+
+/* ── Zones: each section keeps the brand but has its own surface. ── */
+html[data-zone="studio"] { --bg: #070707; --card: #111110; }
+html[data-zone="labs"] { --bg: var(--bone); --fg: var(--void); --fg-2: var(--ash-700); --muted: var(--ash-500); --line: #0a0a0a; --card: #fffdf9; color-scheme: light; }
+html[data-zone="records"] { --bg: #e9e6e0; --fg: #0d0d0d; --fg-2: #3d3b38; --muted: #77746f; --line: #0d0d0d26; --card: #f4f2ee; color-scheme: light; }
+html[data-zone="labs"] .btn { --b-bg: var(--void); --b-fg: var(--bone); }
+html[data-zone="records"] .btn { --b-bg: #0d0d0d; --b-fg: #f4f2ee; }

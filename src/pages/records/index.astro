@@ -1,0 +1,89 @@
+---
+import Base from "../../layouts/Base.astro";
+import Sleeve from "../../components/Sleeve.astro";
+import { ARTISTS, RELEASES } from "../../data/site";
+const lead = RELEASES[0];
+---
+<Base title="Records" zone="records" description="ARMGDN Records: releases from yondr and future artists.">
+  <section class="lead wrap">
+    <div class="lead__top" data-reveal>
+      <span class="mono"><span class="dot-live"></span> ({lead.status === "out" ? "out now" : "coming soon"})</span>
+      <span class="mono">{lead.catalog}</span>
+    </div>
+    <div class="lead__grid">
+      <div data-reveal>
+        <h1 class="lead__title">{lead.title}<sup>('{lead.year.slice(2)})</sup></h1>
+        <p class="lead__by">{lead.artist} · {lead.format}</p>
+        <p class="mono lead__meta">{lead.tracks.length} {lead.tracks.length === 1 ? "track" : "tracks"} · ARMGDN Records</p>
+        <a class="btn" href={`/records/${lead.slug}/`}><span class="roll"><span>Open release</span><span>Open release</span></span><span class="pip"></span></a>
+      </div>
+      <a href={`/records/${lead.slug}/`} class="lead__sleeve" data-reveal data-tilt><Sleeve r={lead} /></a>
+    </div>
+  </section>
+
+  <h2 class="giant" aria-label="Records"><span class="lines"><span><span>RECORDS</span></span></span></h2>
+
+  <section class="dark">
+    <div class="wrap">
+      <div class="sec-head" data-reveal><span class="mono">( catalogue )</span><span class="mono">{RELEASES.length} {RELEASES.length === 1 ? "release" : "releases"}</span></div>
+      <div class="cat">
+        {RELEASES.map((r) => (
+          <a class="cat__item" href={`/records/${r.slug}/`} data-reveal>
+            <Sleeve r={r} />
+            <div class="cat__meta"><span>{r.title}</span><span class="mono">{r.catalog}</span></div>
+            <div class="cat__sub mono">{r.artist} · {r.format} · {r.status === "out" ? r.year : "soon"}</div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="roster wrap">
+    <div class="sec-head" data-reveal><span class="mono">( roster )</span><span class="mono">artists</span></div>
+    <div class="roster__list">
+      {ARTISTS.map((a, i) => (
+        <a class={`artist ${a.open ? "artist--open" : ""}`} href={a.open ? "/about/#contact" : `/records/artists/${a.slug}/`} data-reveal>
+          <span class="mono">0{i + 1}</span>
+          <span class="artist__name">{a.name}</span>
+          <span class="artist__role mono">{a.role}</span>
+          <span class="artist__go" aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .mono { font: 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-2); }
+  .lead { padding-top: 36px; }
+  .lead__top { display: flex; justify-content: space-between; }
+  .lead__grid { display: grid; grid-template-columns: 1fr minmax(240px, 400px); gap: 40px; align-items: center; margin-top: 40px; }
+  .lead__title { margin: 0; font: 600 clamp(56px, 9vw, 132px)/0.88 var(--grot); letter-spacing: -0.05em; }
+  .lead__title sup { font: 400 0.22em/1 var(--grot); vertical-align: 2.8em; margin-left: 6px; letter-spacing: 0; }
+  .lead__by { margin: 18px 0 6px; font: 500 22px/1.2 var(--grot); }
+  .lead__meta { margin: 0 0 26px; }
+  .lead__sleeve { display: block; transform: rotate(3deg); transition: transform 0.2s; }
+  @media (max-width: 760px) { .lead__grid { grid-template-columns: 1fr; } .lead__sleeve { max-width: 320px; } }
+
+  /* Giant condensed lettering bleeding off the page, with a torn glitch band. */
+  .giant { position: relative; margin: 60px 0 -0.12em; font: 900 clamp(120px, 31vw, 520px)/0.8 var(--grot); font-stretch: 62%; letter-spacing: -0.03em; text-align: center; white-space: nowrap; overflow: hidden; }
+  .giant::after { content: ""; position: absolute; left: 0; right: 0; top: 46%; height: 9%; background: repeating-linear-gradient(90deg, var(--bg) 0 3px, transparent 3px 7px, var(--bg) 7px 9px, transparent 9px 16px); mix-blend-mode: normal; transform: skewX(-12deg); opacity: 0.95; }
+
+  .dark { background: #0d0d0d; color: #e9e6e0; padding: 40px 0 70px; }
+  .dark .mono { color: #a8a49c; }
+  .sec-head { display: flex; justify-content: space-between; padding-bottom: 18px; border-bottom: 1px solid currentColor; margin-bottom: 26px; opacity: 0.9; }
+  .cat { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 22px; }
+  .cat__item { display: flex; flex-direction: column; gap: 10px; }
+  .cat__item :global(.sleeve) { transition: transform 0.5s var(--spring); }
+  .cat__item:hover :global(.sleeve) { transform: translateY(-6px) rotate(-1.5deg); }
+  .cat__meta { display: flex; justify-content: space-between; align-items: baseline; font: 600 18px/1 var(--grot); }
+
+  .roster { padding-top: 70px; }
+  .artist { display: grid; grid-template-columns: 40px 1fr auto 40px; gap: 16px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--line); }
+  .artist__name { font: 800 clamp(44px, 7vw, 96px)/0.9 var(--grot); font-stretch: 62%; text-transform: uppercase; transition: transform 0.4s var(--spring); }
+  .artist:hover .artist__name { transform: translateX(10px); }
+  .artist__go { justify-self: end; transition: transform 0.4s var(--spring); }
+  .artist:hover .artist__go { transform: translateX(6px); }
+  .artist--open .artist__name { color: transparent; -webkit-text-stroke: 1px var(--fg); }
+  @media (max-width: 640px) { .artist { grid-template-columns: 1fr auto; } .artist > .mono:first-child, .artist__go { display: none; } }
+</style>

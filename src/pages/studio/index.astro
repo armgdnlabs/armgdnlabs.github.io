@@ -1,0 +1,88 @@
+---
+import Base from "../../layouts/Base.astro";
+import { TOOLS } from "../../data/site";
+const img = (id: string, w = 1600) => `https://images.unsplash.com/photo-${id}?w=${w}&q=75&auto=format`;
+const monitor = TOOLS.find((t) => t.slug === "monitor")!;
+const features = ["75 GPU effects", "117 presets", "Keyframes and modulators", "Video and image export", "No account, no watermark", "Open source"];
+---
+<Base title="Studio" zone="studio" description="ARMGDN Studio: free creative tools that run in the browser. Monitor, the GPU image and video FX editor, and more in the lab.">
+  <section class="hero wrap">
+    <h1 class="hero__title"><span class="lines"><span><span>Studio.</span></span></span><sup class="hero__sup" data-reveal>(tools)</sup></h1>
+    <div class="hero__side" data-reveal>
+      <p><b>Free tools for images, video and sound</b> — built in-house, running in the browser, open source where it makes sense.</p>
+      <a class="btn" href={monitor.url}><span class="roll"><span>Open Monitor</span><span>Open Monitor</span></span><span class="pip"></span></a>
+    </div>
+  </section>
+
+  <section class="rows">
+    <div class="wrap rows__head" data-reveal><span class="tag">Collection</span><span class="rows__count">({String(TOOLS.length).padStart(2, "0")})</span></div>
+    {TOOLS.map((t, i) => (
+      <a class={`row ${t.status === "lab" ? "row--lab" : ""}`} href={t.url ?? "#"} aria-disabled={t.status === "lab" ? "true" : undefined}>
+        <div class="wrap row__in">
+          <span class="row__n">({String(i + 1).padStart(2, "0")})</span>
+          <span class="row__name" data-pan style={`background-image:linear-gradient(#f7f2ec55,#f7f2ec55),url(${img(t.photo)})`}>{t.name}.</span>
+          <span class="row__meta">
+            <span class="row__status">{t.status === "live" ? <><span class="dot-live"></span> Live</> : "In the lab"}</span>
+            <span class="row__line">{t.line}</span>
+            <span class="row__credit">Photo: @{t.by} / Unsplash</span>
+          </span>
+          <span class="row__go" aria-hidden="true">↗</span>
+        </div>
+      </a>
+    ))}
+  </section>
+
+  <section class="feat wrap">
+    <div class="feat__card" data-reveal data-tilt>
+      <div class="feat__left">
+        <p class="tag">Current release</p>
+        <h2 class="feat__title">Monitor<sup>(fx)</sup></h2>
+        <p class="feat__line">{monitor.line}</p>
+        <div class="feat__btns">
+          <a class="btn" href="/monitor/"><span class="roll"><span>Launch</span><span>Launch</span></span><span class="pip"></span></a>
+          <a class="btn ghost" href="https://github.com/armgdnlabs/monitor"><span class="roll"><span>Source</span><span>Source</span></span></a>
+        </div>
+      </div>
+      <ul class="feat__list">{features.map((f) => <li><span>+</span>{f}</li>)}</ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { display: grid; grid-template-columns: 1fr minmax(260px, 360px); gap: 40px; align-items: end; padding: clamp(60px, 12vw, 160px) 0 72px; }
+  .hero__title { margin: 0; font: 600 clamp(84px, 17vw, 260px)/0.84 var(--grot); letter-spacing: -0.065em; }
+  .hero__title { display: flex; align-items: flex-start; }
+  .hero__sup { font: 500 0.12em/1 var(--grot); letter-spacing: 0; color: var(--signal); margin: 0.25em 0 0 0.15em; }
+  .hero__side p { margin: 0 0 22px; color: var(--fg-2); font: 15px/1.55 var(--grot); }
+  .hero__side b { color: var(--fg); font-weight: 600; }
+  @media (max-width: 820px) { .hero { grid-template-columns: 1fr; } }
+
+  .rows { background: #000; border-radius: 34px 34px 0 0; padding: 28px 0 10px; box-shadow: 0 -1px 0 #ffffff14; }
+  .rows__head { display: flex; gap: 10px; align-items: baseline; margin-bottom: 8px; }
+  .rows__count { font: 13px/1 var(--grot); color: var(--muted); }
+  .row { display: block; border-top: 1px solid #ffffff12; }
+  .row__in { display: grid; grid-template-columns: 54px 1fr minmax(200px, 300px) 44px; gap: 18px; align-items: center; padding: 14px 0; }
+  .row__n { font: 12px/1 var(--grot); color: var(--muted); }
+  /* Photo-filled lettering: greyscale at rest, colour on hover, the picture drifts with the cursor. */
+  .row__name { font: 600 clamp(64px, 12vw, 190px)/0.86 var(--grot); letter-spacing: -0.06em; color: transparent; background-size: cover; background-position: 50% 50%; -webkit-background-clip: text; background-clip: text; filter: grayscale(1) contrast(1.1) brightness(1.1); transition: filter 0.5s var(--ease), background-position 0.6s var(--ease); padding-bottom: 0.06em; }
+  .row:hover .row__name { filter: none; }
+  .row__meta { display: flex; flex-direction: column; gap: 6px; font: 13px/1.45 var(--grot); color: var(--fg-2); }
+  .row__status { color: var(--fg); font-weight: 600; }
+  .row__credit { font: 10px/1 var(--mono); color: var(--muted); }
+  .row__go { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #ffffff10; transition: transform 0.4s var(--spring), background 0.3s; }
+  .row:hover .row__go { background: var(--signal); transform: rotate(45deg); }
+  .row--lab { pointer-events: none; }
+  .row--lab .row__name { opacity: 0.45; }
+  @media (max-width: 820px) { .row__in { grid-template-columns: 1fr; gap: 8px; } .row__n, .row__go { display: none; } }
+
+  .feat { margin-top: 80px; }
+  .feat__card { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; padding: clamp(24px, 4vw, 48px); border-radius: 30px; background: radial-gradient(500px circle at var(--gx, 30%) var(--gy, 0%), #ffffff0f, transparent 60%), #0e0e0f; box-shadow: inset 0 1px 0 #ffffff1f, 0 24px 60px -20px #000; transition: transform 0.2s; }
+  .feat__title { margin: 14px 0; font: 600 clamp(56px, 8vw, 112px)/0.9 var(--grot); letter-spacing: -0.06em; }
+  .feat__title sup { font-size: 0.24em; color: var(--signal); letter-spacing: 0; vertical-align: 2.6em; margin-left: 6px; }
+  .feat__line { margin: 0 0 26px; color: var(--fg-2); max-width: 46ch; font: 15px/1.55 var(--grot); }
+  .feat__btns { display: flex; flex-wrap: wrap; gap: 10px; }
+  .feat__list { list-style: none; margin: 0; padding: 0; align-self: center; }
+  .feat__list li { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid #ffffff12; font: 500 16px/1 var(--grot); }
+  .feat__list li span { color: var(--signal); }
+  @media (max-width: 820px) { .feat__card { grid-template-columns: 1fr; } }
+</style>

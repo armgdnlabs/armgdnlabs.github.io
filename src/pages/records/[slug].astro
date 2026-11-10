@@ -1,0 +1,61 @@
+---
+import Base from "../../layouts/Base.astro";
+import Sleeve from "../../components/Sleeve.astro";
+import { RELEASES, type Release } from "../../data/site";
+export function getStaticPaths() { return RELEASES.map((r) => ({ params: { slug: r.slug }, props: { r } })); }
+const { r } = Astro.props as { r: Release };
+---
+<Base title={`${r.title} — ${r.artist}`} zone="records" description={`${r.artist} — ${r.title} (${r.format}, ${r.catalog}) on ARMGDN Records.`}>
+  <section class="rel wrap">
+    <div class="rel__top"><a class="mono" href="/records/">← Records</a><span class="mono">{r.catalog}</span></div>
+    <div class="rel__grid">
+      <div data-reveal>
+        <p class="mono"><span class="dot-live"></span> ({r.status === "out" ? "out now" : "coming soon"})</p>
+        <h1 class="rel__title">{r.title}<sup>('{r.year.slice(2)})</sup></h1>
+        <p class="rel__by">{r.artist} · {r.format}</p>
+        <div class="rel__links">
+          {(r.links ?? []).length ? r.links!.map((l) => (
+            <a class="btn" href={l.url} rel="noopener"><span class="roll"><span>{l.label}</span><span>{l.label}</span></span><span class="pip"></span></a>
+          )) : <span class="btn ghost"><span class="roll"><span>Links on release day</span><span>Links on release day</span></span></span>}
+        </div>
+      </div>
+      <div class="rel__sleeve" data-reveal data-tilt><Sleeve r={r} /></div>
+    </div>
+  </section>
+
+  <section class="inside">
+    <div class="wrap">
+      <h2 class="inside__title lines"><span><span>INSIDE</span></span></h2>
+      <p class="inside__root">! {r.slug} _ {r.artist} /</p>
+      {r.tracks.map((t) => (
+        <div class="track" data-reveal>
+          <span class="track__n">{String(t.n).padStart(2, "0")}</span>
+          <span class="track__t">{t.title}</span>
+          <span class="track__l">{t.length ?? "—:—"}</span>
+        </div>
+      ))}
+      {r.credits && <div class="credits">{r.credits.map((c) => <p>{c}</p>)}</div>}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .mono { font: 11px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-2); }
+  .rel { padding-top: 36px; }
+  .rel__top { display: flex; justify-content: space-between; }
+  .rel__grid { display: grid; grid-template-columns: 1fr minmax(260px, 460px); gap: 48px; align-items: center; margin: 48px 0 80px; }
+  .rel__title { margin: 16px 0 0; font: 600 clamp(56px, 10vw, 150px)/0.86 var(--grot); letter-spacing: -0.05em; }
+  .rel__title sup { font: 400 0.2em/1 var(--grot); vertical-align: 3em; margin-left: 6px; letter-spacing: 0; }
+  .rel__by { margin: 18px 0 26px; font: 500 22px/1.2 var(--grot); }
+  .rel__links { display: flex; flex-wrap: wrap; gap: 10px; }
+  .rel__sleeve { transform: rotate(-2deg); transition: transform 0.2s; }
+  @media (max-width: 760px) { .rel__grid { grid-template-columns: 1fr; } }
+  .inside { background: #0d0d0d; color: #e9e6e0; padding: 40px 0 70px; font: 14px/1.4 var(--mono); }
+  .inside__title { margin: 0 0 24px; font: 900 clamp(90px, 18vw, 260px)/0.8 var(--grot); font-stretch: 62%; text-align: center; }
+  .inside__root { color: #a8a49c; }
+  .track { display: grid; grid-template-columns: 60px 1fr auto; gap: 14px; padding: 14px 0; border-top: 1px solid #e9e6e022; }
+  .track__n { color: #a8a49c; }
+  .track__t { font: 600 18px/1.2 var(--grot); }
+  .credits { margin-top: 36px; color: #a8a49c; }
+  .credits p { margin: 0 0 6px; }
+</style>

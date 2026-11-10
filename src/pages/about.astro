@@ -1,0 +1,40 @@
+---
+import Base from "../layouts/Base.astro";
+import Mark from "../components/Mark.astro";
+import { SOCIALS } from "../data/site";
+const parts = [
+  ["Labs", "yondr's plugins, drum kits and sample packs. Free or pay what you want for most; bigger packs and plugins on Gumroad."],
+  ["Studio", "Creative tools that run in the browser, free and open source. Monitor is the first."],
+  ["Records", "A small label for yondr releases and the artists that come next."],
+];
+---
+<Base title="About" zone="about" description="ARMGDN is a one-person house for sound, image and records, run by the producer yondr.">
+  <section class="ab wrap">
+    <Mark class="ab__sym" />
+    <h1 class="ab__title lines"><span><span>The Chaos</span></span><span><span>to Create.</span></span></h1>
+    <p class="ab__lede" data-reveal>ARMGDN — short for Armageddon — is run by the producer <b>yondr</b>. It makes sounds, tools and records, and gives away as much of it as it can.</p>
+    <div class="ab__parts">
+      {parts.map(([h, t], i) => (
+        <div class="part" data-reveal style={`transition-delay:${i * 80}ms`}><span class="tag">{h}</span><p>{t}</p></div>
+      ))}
+    </div>
+    <div id="contact" class="ab__contact" data-reveal>
+      <span class="tag">Contact</span>
+      <p>Submissions for Records open later this year. Until then, find ARMGDN on {SOCIALS.map((s, i) => <>{i ? ", " : ""}<a href={s.url}>{s.label}</a></>)}.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .ab { padding: 60px 0 0; }
+  .ab :global(.ab__sym) { height: 72px; }
+  .ab__title { margin: 36px 0; font: italic 400 clamp(56px, 10vw, 150px)/0.92 var(--serif); }
+  .ab__lede { max-width: 640px; margin: 0 0 56px; font: 400 20px/1.5 var(--grot); color: var(--fg-2); }
+  .ab__lede b { color: var(--fg); }
+  .ab__parts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .part { padding: 22px; border-radius: 22px; background: var(--card); box-shadow: inset 0 0 0 1px var(--line); }
+  .part p { margin: 14px 0 0; color: var(--fg-2); font: 14px/1.6 var(--mono); }
+  .ab__contact { margin-top: 56px; }
+  .ab__contact p { font: 16px/1.6 var(--grot); color: var(--fg-2); }
+  .ab__contact a { color: var(--fg); text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 760px) { .ab__parts { grid-template-columns: 1fr; } }
+</style>

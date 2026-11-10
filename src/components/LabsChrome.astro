@@ -1,0 +1,24 @@
+---
+/** Labs pages sit inside a pixel "browser window": address bar and section links. */
+interface Props { path: string }
+const { path } = Astro.props;
+const links = [["/labs/#shelf", "Shelf"], ["/labs/#pack", "Pack"], ["/labs/#pricing", "Pricing"]];
+---
+<div class="chrome">
+  <span class="chrome__btns" aria-hidden="true"><i></i><i></i><i></i></span>
+  <span class="chrome__addr"><span class="chrome__lock" aria-hidden="true">▣</span> armgdn/labs{path}<span class="chrome__caret" aria-hidden="true">_</span></span>
+  <nav class="chrome__nav" aria-label="Labs">{links.map(([h, l]) => <a href={h}>{l}</a>)}</nav>
+</div>
+<style>
+  .chrome { position: sticky; top: 60px; z-index: 40; display: flex; align-items: center; gap: 14px; height: 46px; padding: 0 var(--gutter); background: var(--bone); border-bottom: 2px solid var(--void); font: 18px/1 var(--screen); }
+  .chrome__btns { display: flex; gap: 4px; }
+  .chrome__btns i { width: 12px; height: 12px; border: 2px solid var(--void); }
+  .chrome__btns i:first-child { background: var(--void); }
+  .chrome__addr { flex: 1; max-width: 560px; height: 28px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border: 2px solid var(--void); background: #fffdf9; }
+  .chrome__caret { animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .chrome__nav { display: flex; gap: 4px; margin-left: auto; }
+  .chrome__nav a { padding: 4px 10px; font: 700 11px/1 var(--pixel); text-transform: uppercase; }
+  .chrome__nav a:hover { background: var(--void); color: var(--bone); }
+  @media (max-width: 640px) { .chrome__nav { display: none; } }
+</style>

@@ -1,29 +1,31 @@
 # ARMGDN
 
-**The Chaos to Create.**
+**The Chaos to Create.** Plugins, kits and samples by yondr; free creative tools; records.
 
-Tools, music, and art. Built by one person, free to use.
+Live at **https://armgdnlabs.github.io**
 
----
+| Section | What | Look |
+|---|---|---|
+| **Labs** `/labs/` | yondr plugins, drum kits, sample packs. Free, pay what you want, or Gumroad | Pixel "plugin" windows on bone |
+| **Studio** `/studio/` | Free browser tools: [Monitor](https://armgdnlabs.github.io/monitor/) and what comes next | Dark, giant photo-filled type |
+| **Records** `/records/` | Releases, roster, artist pages | Paper and black, condensed type |
 
-### [armgdnlabs.github.io](https://armgdnlabs.github.io)
+## Editing content
 
-| | |
-|---|---|
-| **Labs** | Browser tools for producers — [armgdnlabs.github.io/labs](https://armgdnlabs.github.io/labs/) |
-| **Records** | Music releases — [armgdnlabs.github.io/records](https://armgdnlabs.github.io/records/) |
-| **Studios** | Art & design work — [armgdnlabs.github.io/studios](https://armgdnlabs.github.io/studios/) |
+Everything comes from `src/data/site.ts`:
 
----
+- **Add a product:** append to `PRODUCTS`. Set `status: "out"` and `url` (Gumroad link for paid, a download link for free or pay-what-you-want) to switch on its buy button.
+- **Add a release:** append to `RELEASES` (tracks, links, credits, optional `cover` image URL). Without a cover, a typographic sleeve is drawn.
+- **Add an artist:** append to `ARTISTS`.
+- **Add a tool:** append to `TOOLS`.
 
-### Live tools
+Push to `main` and GitHub Actions rebuilds the site.
 
-| Tool | Link |
-|---|---|
-| Pocket Radio FM | [pocket-radio-fm.lovable.app](https://pocket-radio-fm.lovable.app) |
-| Kit Foundry | [kit-foundry.lovable.app](https://kit-foundry.lovable.app) |
-| Chord Codes 101 | [chord-codes-101.lovable.app](https://chord-codes-101.lovable.app) |
+## Develop
 
----
+```bash
+npm install
+npm run dev
+```
 
-Free / pay what you want.
+Astro, no client framework. Motion lives in `src/scripts/site.ts`; tokens in `src/styles/base.css` mirror the ARMGDN Figma brand system.
